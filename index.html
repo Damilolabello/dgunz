@@ -1,0 +1,2065 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DGUNZ Audio | Professional Mixing & Mastering</title>
+  <meta name="description" content="DGUNZ Audio — Professional mixing and mastering services for artists worldwide. Apple Digital Masters certified. Over 2 million streams engineered." />
+  <meta name="keywords" content="professional mixing services, online mixing and mastering, music mastering services, song mixing engineer, audio mixing studio, affordable mastering service, professional stem mixing" />
+  <meta property="og:title" content="DGUNZ Audio | Professional Mixing & Mastering" />
+  <meta property="og:description" content="Commercial-grade mixing and mastering for artists who demand the best. Apple Digital Masters Certified." />
+  <meta property="og:type" content="website" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet" />
+  <style>
+    /* ===================== RESET & BASE ===================== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: #060606;
+      color: #f0ede8;
+      font-family: 'DM Sans', sans-serif;
+      overflow-x: hidden;
+      cursor: none;
+    }
+
+    /* ===================== CUSTOM CURSOR ===================== */
+    .cursor {
+      width: 8px; height: 8px;
+      background: #c8a96e; border-radius: 50%;
+      position: fixed; pointer-events: none; z-index: 9999;
+      transform: translate(-50%, -50%);
+      transition: width 0.2s, height 0.2s, background 0.2s;
+    }
+    .cursor-ring {
+      width: 36px; height: 36px;
+      border: 1px solid rgba(200,169,110,0.4);
+      border-radius: 50%;
+      position: fixed; pointer-events: none; z-index: 9998;
+      transform: translate(-50%, -50%);
+      transition: all 0.12s ease;
+    }
+    body:has(a:hover) .cursor,
+    body:has(button:hover) .cursor { width: 14px; height: 14px; background: #e8c98a; }
+    body:has(a:hover) .cursor-ring,
+    body:has(button:hover) .cursor-ring { width: 50px; height: 50px; border-color: rgba(200,169,110,0.6); }
+
+    /* ===================== CSS VARIABLES ===================== */
+    :root {
+      --bg:      #060606;
+      --bg2:     #0b0b0b;
+      --bg3:     #0f0f0f;
+      --card:    #111111;
+      --card2:   #161616;
+      --border:  rgba(255,255,255,0.055);
+      --border2: rgba(255,255,255,0.1);
+      --gold:    #c8a96e;
+      --gold2:   #e8c98a;
+      --gold3:   rgba(200,169,110,0.12);
+      --text:    #f0ede8;
+      --text2:   #c8c4be;
+      --muted:   #6a6560;
+      --muted2:  #968f88;
+      --radius:  2px;
+    }
+
+    /* ===================== SCROLLBAR ===================== */
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--gold); }
+
+    /* ===================== TYPOGRAPHY ===================== */
+    .font-display { font-family: 'Syne', sans-serif; }
+
+    /* ===================== GRAIN OVERLAY ===================== */
+    body::before {
+      content: '';
+      position: fixed; inset: 0; z-index: 9990;
+      pointer-events: none;
+      opacity: 0.025;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+      background-size: 200px;
+    }
+
+    /* ===================== NAVBAR ===================== */
+    #navbar {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+      height: 72px;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 3rem;
+      transition: all 0.5s ease;
+    }
+    #navbar.scrolled {
+      background: rgba(6,6,6,0.94);
+      backdrop-filter: blur(24px) saturate(1.4);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.35rem; font-weight: 800;
+      letter-spacing: 0.06em; color: var(--text);
+      cursor: pointer; text-decoration: none;
+      transition: opacity 0.3s;
+    }
+    .nav-logo:hover { opacity: 0.85; }
+    .nav-logo .dot { color: var(--gold); }
+    .nav-center {
+      display: flex; gap: 2.8rem; list-style: none;
+    }
+    .nav-center a {
+      font-size: 0.78rem; font-weight: 400;
+      letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--muted2); cursor: pointer;
+      text-decoration: none; transition: color 0.3s;
+      position: relative;
+    }
+    .nav-center a::after {
+      content: ''; position: absolute; bottom: -4px; left: 0; right: 0;
+      height: 1px; background: var(--gold);
+      transform: scaleX(0); transition: transform 0.3s;
+    }
+    .nav-center a:hover { color: var(--gold); }
+    .nav-center a:hover::after { transform: scaleX(1); }
+    .nav-btn {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.72rem; font-weight: 500;
+      letter-spacing: 0.16em; text-transform: uppercase;
+      color: var(--gold); background: transparent;
+      border: 1px solid var(--gold);
+      padding: 0.6rem 1.6rem; cursor: pointer;
+      transition: all 0.3s; white-space: nowrap;
+    }
+    .nav-btn:hover { background: var(--gold); color: #060606; }
+    .hamburger {
+      display: none; flex-direction: column; gap: 5px;
+      background: none; border: none; cursor: pointer; padding: 4px;
+    }
+    .hamburger span {
+      display: block; width: 24px; height: 1px; background: var(--text);
+      transition: all 0.3s;
+    }
+    .hamburger.open span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; }
+    .hamburger.open span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+    .mobile-menu {
+      display: none; position: fixed;
+      top: 72px; left: 0; right: 0; bottom: 0;
+      background: rgba(6,6,6,0.98);
+      backdrop-filter: blur(20px);
+      z-index: 999; padding: 3rem 2rem;
+      flex-direction: column; gap: 0;
+      border-top: 1px solid var(--border);
+    }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu a {
+      font-family: 'Syne', sans-serif;
+      font-size: 2rem; font-weight: 700;
+      color: var(--muted2); text-decoration: none;
+      padding: 1rem 0; border-bottom: 1px solid var(--border);
+      cursor: pointer; transition: color 0.3s;
+    }
+    .mobile-menu a:hover { color: var(--gold); }
+    .mobile-menu .nav-btn { margin-top: 2rem; display: inline-block; text-align: center; }
+
+    /* ===================== PAGE SYSTEM ===================== */
+    .page { display: none; min-height: 100vh; }
+    .page.active { display: block; }
+
+    /* ===================== HERO ===================== */
+    .hero {
+      min-height: 100vh;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      text-align: center; padding: 9rem 2rem 6rem;
+      position: relative; overflow: hidden;
+    }
+    .hero-glow {
+      position: absolute; top: -20%; left: 50%; transform: translateX(-50%);
+      width: 800px; height: 600px; border-radius: 50%;
+      background: radial-gradient(ellipse, rgba(200,169,110,0.07) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero-glow2 {
+      position: absolute; bottom: 0; left: -10%;
+      width: 500px; height: 400px;
+      background: radial-gradient(ellipse, rgba(200,169,110,0.04) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero-grid-bg {
+      position: absolute; inset: 0; pointer-events: none;
+      opacity: 0.018;
+      background-image:
+        linear-gradient(rgba(200,169,110,1) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(200,169,110,1) 1px, transparent 1px);
+      background-size: 64px 64px;
+    }
+    .hero-content { position: relative; z-index: 2; max-width: 1000px; }
+    .eyebrow {
+      display: inline-flex; align-items: center; gap: 1rem;
+      font-size: 0.7rem; letter-spacing: 0.28em;
+      text-transform: uppercase; color: var(--gold);
+      margin-bottom: 2rem;
+    }
+    .eyebrow::before, .eyebrow::after {
+      content: ''; width: 36px; height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold));
+    }
+    .eyebrow::after { background: linear-gradient(90deg, var(--gold), transparent); }
+    .hero-h1 {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(3.2rem, 9vw, 8rem);
+      font-weight: 800; line-height: 0.92;
+      letter-spacing: -0.03em; color: var(--text);
+      margin-bottom: 1.8rem;
+    }
+    .hero-h1 .line2 {
+      display: block;
+      -webkit-text-stroke: 1px rgba(200,169,110,0.35);
+      color: transparent;
+    }
+    .hero-h1 .gold { color: var(--gold); }
+    .hero-sub {
+      font-size: clamp(0.95rem, 1.8vw, 1.15rem);
+      font-weight: 300; color: var(--muted2);
+      max-width: 580px; margin: 0 auto 3rem;
+      line-height: 1.75;
+    }
+    .hero-ctas { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+    .btn-gold {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.8rem; font-weight: 600;
+      letter-spacing: 0.14em; text-transform: uppercase;
+      background: var(--gold); color: #060606;
+      border: none; padding: 1rem 2.8rem;
+      cursor: pointer; transition: all 0.3s;
+      position: relative; overflow: hidden;
+    }
+    .btn-gold::before {
+      content: ''; position: absolute; inset: 0;
+      background: rgba(255,255,255,0.18);
+      transform: translateX(-101%); transition: transform 0.4s ease;
+    }
+    .btn-gold:hover::before { transform: translateX(0); }
+    .btn-ghost {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.8rem; font-weight: 400;
+      letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--text2); background: transparent;
+      border: 1px solid var(--border2);
+      padding: 1rem 2.8rem; cursor: pointer; transition: all 0.3s;
+    }
+    .btn-ghost:hover { border-color: var(--gold); color: var(--gold); }
+    .hero-scroll-hint {
+      position: absolute; bottom: 2.5rem; left: 50%; transform: translateX(-50%);
+      display: flex; flex-direction: column; align-items: center; gap: 0.6rem;
+      opacity: 0.35;
+    }
+    .scroll-line {
+      width: 1px; height: 50px;
+      background: linear-gradient(var(--gold), transparent);
+      animation: scrollLine 2s ease infinite;
+    }
+    @keyframes scrollLine {
+      0% { transform: scaleY(0); transform-origin: top; opacity: 1; }
+      50% { transform: scaleY(1); transform-origin: top; opacity: 1; }
+      51% { transform: scaleY(1); transform-origin: bottom; }
+      100% { transform: scaleY(0); transform-origin: bottom; opacity: 0; }
+    }
+    .scroll-text { font-size: 0.6rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); }
+
+    /* ===================== STATS BAR ===================== */
+    .stats-bar {
+      display: flex; justify-content: center;
+      border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+      background: var(--bg2);
+    }
+    .stat-item {
+      flex: 1; max-width: 220px;
+      padding: 2.5rem 2rem; text-align: center;
+      border-right: 1px solid var(--border);
+    }
+    .stat-item:last-child { border-right: none; }
+    .stat-num {
+      font-family: 'Syne', sans-serif;
+      font-size: 2.4rem; font-weight: 800; color: var(--gold);
+      line-height: 1; display: block; margin-bottom: 0.4rem;
+    }
+    .stat-label {
+      font-size: 0.68rem; letter-spacing: 0.18em;
+      text-transform: uppercase; color: var(--muted);
+    }
+
+    /* ===================== TRUST STRIP ===================== */
+    .trust-strip {
+      display: flex; gap: 0;
+      border-bottom: 1px solid var(--border);
+      overflow-x: auto; background: var(--bg2);
+    }
+    .trust-item {
+      display: flex; align-items: center; gap: 0.8rem;
+      padding: 1.4rem 2.5rem; white-space: nowrap;
+      border-right: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+    .trust-item:last-child { border-right: none; }
+    .trust-dot { width: 5px; height: 5px; background: var(--gold); border-radius: 50%; flex-shrink: 0; }
+    .trust-text { font-size: 0.75rem; letter-spacing: 0.08em; color: var(--muted2); }
+
+    /* ===================== SECTIONS ===================== */
+    .section { padding: 8rem 4rem; max-width: 1280px; margin: 0 auto; }
+    .section-slim { padding: 5rem 4rem; max-width: 1280px; margin: 0 auto; }
+    .section-full-bleed { padding: 8rem 0; }
+    .section-inner { max-width: 1280px; margin: 0 auto; padding: 0 4rem; }
+    .section-label {
+      font-size: 0.68rem; letter-spacing: 0.28em;
+      text-transform: uppercase; color: var(--gold);
+      margin-bottom: 1rem; display: block;
+    }
+    .section-title {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(2rem, 4vw, 3.5rem);
+      font-weight: 700; line-height: 1.06;
+      letter-spacing: -0.025em; color: var(--text);
+      margin-bottom: 1.2rem;
+    }
+    .section-body {
+      font-size: 1rem; font-weight: 300;
+      color: var(--muted2); line-height: 1.8;
+      max-width: 580px;
+    }
+    .divider { height: 1px; background: var(--border); margin: 0; }
+
+    /* ===================== SERVICES GRID ===================== */
+    .services-grid {
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      margin-top: 4rem;
+      border: 1px solid var(--border);
+    }
+    .service-card {
+      padding: 2.8rem 2.2rem;
+      border-right: 1px solid var(--border);
+      transition: background 0.4s; cursor: pointer;
+      position: relative; overflow: hidden;
+    }
+    .service-card::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0;
+      height: 2px; background: var(--gold);
+      transform: scaleX(0); transform-origin: left;
+      transition: transform 0.4s ease;
+    }
+    .service-card:hover::before { transform: scaleX(1); }
+    .service-card:last-child { border-right: none; }
+    .service-card:hover { background: var(--card2); }
+    .service-icon-wrap {
+      width: 48px; height: 48px; border: 1px solid var(--border2);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.4rem; margin-bottom: 1.8rem;
+      transition: border-color 0.3s;
+    }
+    .service-card:hover .service-icon-wrap { border-color: var(--gold); }
+    .service-name {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.05rem; font-weight: 700;
+      color: var(--text); margin-bottom: 0.8rem;
+    }
+    .service-desc { font-size: 0.85rem; color: var(--muted2); line-height: 1.75; }
+    .service-link {
+      display: inline-block; margin-top: 1.5rem;
+      font-size: 0.7rem; letter-spacing: 0.18em;
+      text-transform: uppercase; color: var(--gold); cursor: pointer;
+      transition: letter-spacing 0.3s;
+    }
+    .service-card:hover .service-link { letter-spacing: 0.24em; }
+
+    /* ===================== DEMO PLAYER ===================== */
+    .demos-bg { background: var(--bg2); }
+    .demo-wrap { border: 1px solid var(--border); background: var(--card); }
+    .demo-track-list {
+      display: flex; border-bottom: 1px solid var(--border); overflow-x: auto;
+    }
+    .demo-track-btn {
+      padding: 1.2rem 2rem; flex-shrink: 0;
+      background: none; border: none; border-right: 1px solid var(--border);
+      color: var(--muted); font-family: 'DM Sans', sans-serif;
+      font-size: 0.78rem; letter-spacing: 0.1em; text-transform: uppercase;
+      cursor: pointer; transition: all 0.3s;
+      position: relative;
+    }
+    .demo-track-btn::after {
+      content: ''; position: absolute; bottom: 0; left: 0; right: 0;
+      height: 2px; background: var(--gold);
+      transform: scaleX(0); transition: transform 0.3s;
+    }
+    .demo-track-btn.active { color: var(--gold); background: var(--card2); }
+    .demo-track-btn.active::after { transform: scaleX(1); }
+    .demo-track-btn:last-child { border-right: none; }
+    .demo-body { padding: 3rem; }
+    .demo-header {
+      display: flex; justify-content: space-between;
+      align-items: flex-start; margin-bottom: 2.5rem; gap: 2rem; flex-wrap: wrap;
+    }
+    .demo-info { flex: 1; }
+    .demo-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.8rem; font-weight: 700; color: var(--text);
+      margin-bottom: 0.6rem;
+    }
+    .demo-tags { display: flex; gap: 0.6rem; flex-wrap: wrap; margin-bottom: 0.6rem; }
+    .tag {
+      font-size: 0.68rem; letter-spacing: 0.12em; text-transform: uppercase;
+      padding: 0.28rem 0.8rem; border: 1px solid var(--border2); color: var(--muted2);
+    }
+    .demo-note { font-size: 0.83rem; color: var(--muted); }
+    .ab-switch {
+      display: flex; border: 1px solid var(--border2); flex-shrink: 0;
+    }
+    .ab-btn {
+      padding: 0.9rem 2.2rem; background: none; border: none;
+      font-family: 'Syne', sans-serif; font-size: 0.85rem; font-weight: 700;
+      color: var(--muted); cursor: pointer; transition: all 0.3s;
+      border-right: 1px solid var(--border2);
+    }
+    .ab-btn:last-child { border-right: none; }
+    .ab-btn.active { background: var(--gold); color: #060606; }
+    .waveform-container {
+      height: 88px; display: flex; align-items: center;
+      gap: 2px; margin: 2rem 0; position: relative; overflow: hidden;
+    }
+    .wave-bar {
+      flex: 1; border-radius: 1px;
+      transition: height 0.6s cubic-bezier(0.34, 1.56, 0.64, 1), background 0.6s ease;
+    }
+    .playhead {
+      position: absolute; top: 0; bottom: 0; width: 2px;
+      background: rgba(200,169,110,0.8);
+      left: 35%; transition: left 0.1s linear;
+      pointer-events: none;
+    }
+    .playhead::before {
+      content: ''; position: absolute; top: 0;
+      left: -4px; border: 5px solid transparent;
+      border-top-color: var(--gold); border-bottom: none;
+    }
+    .player-controls {
+      display: flex; align-items: center; gap: 1.5rem;
+    }
+    .play-btn {
+      width: 54px; height: 54px; border-radius: 50%;
+      border: 1px solid var(--gold); background: transparent;
+      color: var(--gold); font-size: 1rem;
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      transition: all 0.3s; flex-shrink: 0;
+    }
+    .play-btn:hover { background: var(--gold); color: #060606; }
+    .progress-track {
+      flex: 1; height: 3px; background: var(--border2);
+      border-radius: 2px; cursor: pointer; position: relative;
+    }
+    .progress-fill {
+      height: 100%; background: var(--gold); border-radius: 2px;
+      width: 0%; transition: width 0.1s linear; pointer-events: none;
+    }
+    .time-display {
+      font-family: 'Syne', sans-serif;
+      font-size: 0.75rem; color: var(--muted); flex-shrink: 0;
+      min-width: 60px; text-align: right;
+    }
+    .state-label {
+      font-size: 0.65rem; letter-spacing: 0.25em; text-transform: uppercase;
+      color: var(--gold); margin-top: 0.6rem; text-align: center;
+    }
+
+    /* ===================== STEPS / HOW IT WORKS ===================== */
+    .steps-list { margin-top: 4rem; }
+    .step-item {
+      display: grid; grid-template-columns: 100px 1fr;
+      align-items: start; padding: 2.5rem 0;
+      border-bottom: 1px solid var(--border);
+      transition: background 0.3s;
+    }
+    .step-item:first-child { border-top: 1px solid var(--border); }
+    .step-num-big {
+      font-family: 'Syne', sans-serif;
+      font-size: 3.5rem; font-weight: 800; line-height: 1;
+      color: transparent;
+      -webkit-text-stroke: 1px rgba(200,169,110,0.2);
+      transition: -webkit-text-stroke-color 0.3s;
+    }
+    .step-item:hover .step-num-big { -webkit-text-stroke-color: rgba(200,169,110,0.5); }
+    .step-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.1rem; font-weight: 700; color: var(--text);
+      margin-bottom: 0.5rem;
+    }
+    .step-desc { font-size: 0.88rem; color: var(--muted2); line-height: 1.75; max-width: 600px; }
+
+    /* ===================== PRICING ===================== */
+    .pricing-grid {
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      margin-top: 4rem; border: 1px solid var(--border);
+    }
+    .price-card {
+      padding: 2.8rem 2rem; border-right: 1px solid var(--border);
+      position: relative; background: var(--card);
+      display: flex; flex-direction: column;
+    }
+    .price-card.featured { background: #100f0c; }
+    .price-card:last-child { border-right: none; }
+    .featured-tag {
+      position: absolute; top: -1px; right: 1.5rem;
+      font-family: 'Syne', sans-serif;
+      font-size: 0.6rem; font-weight: 700; letter-spacing: 0.18em;
+      text-transform: uppercase; background: var(--gold);
+      color: #060606; padding: 0.28rem 0.9rem;
+    }
+    .price-tier {
+      font-size: 0.68rem; font-weight: 500; letter-spacing: 0.2em;
+      text-transform: uppercase; color: var(--muted2); margin-bottom: 1rem;
+    }
+    .price-amount {
+      font-family: 'Syne', sans-serif;
+      font-size: 3.2rem; font-weight: 800; color: var(--text);
+      line-height: 1; margin-bottom: 0.3rem;
+    }
+    .price-sub { font-size: 0.75rem; color: var(--muted); margin-bottom: 2rem; }
+    .price-divider { height: 1px; background: var(--border); margin-bottom: 1.8rem; }
+    .price-features { list-style: none; flex: 1; margin-bottom: 2rem; }
+    .price-features li {
+      font-size: 0.82rem; color: var(--muted2); padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border);
+      display: flex; gap: 0.7rem; align-items: flex-start; line-height: 1.5;
+    }
+    .price-features li::before { content: '—'; color: var(--gold); flex-shrink: 0; font-size: 0.7rem; margin-top: 2px; }
+    .price-meta { display: flex; gap: 1rem; margin-bottom: 2rem; flex-wrap: wrap; }
+    .price-meta-item { }
+    .price-meta-label { font-size: 0.62rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+    .price-meta-value { font-size: 0.78rem; color: var(--text2); margin-top: 0.1rem; }
+
+    /* ===================== TESTIMONIALS ===================== */
+    .testimonials-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      margin-top: 4rem; border: 1px solid var(--border);
+    }
+    .testimonial-card {
+      padding: 2.8rem; border-right: 1px solid var(--border);
+      background: var(--card); position: relative;
+    }
+    .testimonial-card:last-child { border-right: none; }
+    .stars { color: var(--gold); font-size: 0.8rem; letter-spacing: 0.15em; margin-bottom: 1.5rem; }
+    .quote-mark {
+      font-family: 'Syne', sans-serif;
+      font-size: 4rem; line-height: 0.5;
+      color: var(--gold); opacity: 0.15;
+      float: left; margin-right: 0.3rem; margin-top: 0.5rem;
+    }
+    .quote-text {
+      font-size: 0.88rem; color: var(--text2);
+      line-height: 1.85; margin-bottom: 2rem; font-style: italic;
+    }
+    .quote-author {
+      font-family: 'Syne', sans-serif;
+      font-size: 0.88rem; font-weight: 700; color: var(--text);
+    }
+    .quote-role { font-size: 0.75rem; color: var(--muted); margin-top: 0.2rem; }
+
+    /* ===================== FAQ ===================== */
+    .faq-list { border-top: 1px solid var(--border); margin-top: 3rem; max-width: 800px; }
+    .faq-item { border-bottom: 1px solid var(--border); }
+    .faq-question {
+      width: 100%; background: none; border: none;
+      color: var(--text); font-family: 'DM Sans', sans-serif;
+      font-size: 0.95rem; font-weight: 400;
+      text-align: left; padding: 1.6rem 0;
+      cursor: pointer; display: flex;
+      justify-content: space-between; align-items: center;
+      gap: 1.5rem; transition: color 0.3s;
+    }
+    .faq-question:hover { color: var(--gold); }
+    .faq-icon {
+      font-size: 1.4rem; color: var(--gold);
+      flex-shrink: 0; transition: transform 0.3s;
+      font-style: normal;
+    }
+    .faq-item.open .faq-icon { transform: rotate(45deg); }
+    .faq-answer {
+      font-size: 0.88rem; color: var(--muted2); line-height: 1.85;
+      padding: 0 0 1.6rem; max-height: 0; overflow: hidden;
+      transition: max-height 0.4s ease, padding 0.3s;
+    }
+    .faq-item.open .faq-answer { max-height: 300px; }
+
+    /* ===================== UPLOAD / ORDER FORM ===================== */
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+    .form-group { display: flex; flex-direction: column; gap: 0.5rem; }
+    .form-group.full { grid-column: 1 / -1; }
+    .form-label {
+      font-size: 0.68rem; letter-spacing: 0.16em;
+      text-transform: uppercase; color: var(--muted2);
+    }
+    .form-input, .form-select, .form-textarea {
+      background: var(--card); border: 1px solid var(--border2);
+      color: var(--text); font-family: 'DM Sans', sans-serif;
+      font-size: 0.9rem; padding: 0.9rem 1rem;
+      outline: none; transition: border-color 0.3s;
+      appearance: none; border-radius: 0;
+    }
+    .form-input::placeholder, .form-textarea::placeholder { color: var(--muted); }
+    .form-input:focus, .form-select:focus, .form-textarea:focus { border-color: var(--gold); }
+    .form-select { cursor: pointer; }
+    .form-select option { background: #111111; color: var(--text); }
+    .form-textarea { resize: vertical; min-height: 110px; }
+    .drop-zone {
+      border: 1px dashed var(--border2); padding: 3rem 2rem;
+      text-align: center; cursor: pointer; transition: all 0.35s;
+      background: var(--card);
+    }
+    .drop-zone.dragover, .drop-zone:hover { border-color: var(--gold); background: rgba(200,169,110,0.03); }
+    .drop-icon { font-size: 2.2rem; margin-bottom: 1rem; opacity: 0.6; }
+    .drop-text { font-size: 0.88rem; color: var(--muted2); margin-bottom: 0.5rem; }
+    .drop-formats { font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+    .file-list { margin-top: 1rem; display: flex; flex-direction: column; gap: 0.5rem; }
+    .file-item {
+      display: flex; align-items: center; gap: 0.8rem;
+      background: var(--card2); border: 1px solid var(--border);
+      padding: 0.65rem 1rem; font-size: 0.8rem; color: var(--muted2);
+    }
+    .file-name { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .file-size { color: var(--muted); font-size: 0.72rem; }
+    .file-remove {
+      background: none; border: none; color: var(--muted);
+      cursor: pointer; font-size: 1rem; transition: color 0.2s; padding: 0 2px;
+    }
+    .file-remove:hover { color: #e05555; }
+    .checkbox-wrap { display: flex; gap: 0.9rem; align-items: flex-start; cursor: pointer; }
+    .form-checkbox { width: 16px; height: 16px; accent-color: var(--gold); flex-shrink: 0; margin-top: 3px; cursor: pointer; }
+    .checkbox-text { font-size: 0.82rem; color: var(--muted2); line-height: 1.6; }
+
+    /* ===================== SUCCESS / ERROR STATES ===================== */
+    .state-box {
+      text-align: center; padding: 6rem 2rem;
+      border: 1px solid var(--border); background: var(--card);
+    }
+    .state-icon { font-size: 3.5rem; margin-bottom: 1.5rem; display: block; }
+    .state-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 2rem; font-weight: 700; color: var(--text); margin-bottom: 0.8rem;
+    }
+    .state-msg { font-size: 0.9rem; color: var(--muted2); max-width: 480px; margin: 0 auto 2.5rem; line-height: 1.75; }
+
+    /* ===================== ABOUT ===================== */
+    .about-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 6rem; align-items: start; }
+    .about-visual {
+      position: sticky; top: 100px;
+    }
+    .engineer-card {
+      background: var(--card); border: 1px solid var(--border);
+      aspect-ratio: 3/4; display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      position: relative; overflow: hidden;
+    }
+    .engineer-placeholder { font-size: 7rem; opacity: 0.08; }
+    .engineer-overlay {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      padding: 2rem;
+      background: linear-gradient(transparent, rgba(6,6,6,0.96));
+    }
+    .engineer-name {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.5rem; font-weight: 800; color: var(--text);
+      margin-bottom: 0.3rem;
+    }
+    .engineer-title { font-size: 0.75rem; color: var(--gold); letter-spacing: 0.1em; text-transform: uppercase; }
+    .credentials { margin-top: 1.5rem; display: flex; flex-direction: column; gap: 0.8rem; }
+    .credential-row { display: flex; gap: 0.9rem; align-items: flex-start; }
+    .cred-dot { width: 5px; height: 5px; background: var(--gold); border-radius: 50%; flex-shrink: 0; margin-top: 5px; }
+    .cred-text { font-size: 0.78rem; color: var(--muted2); line-height: 1.5; }
+    .about-body { }
+    .about-para { font-size: 0.92rem; color: var(--muted2); line-height: 1.85; margin-bottom: 1.5rem; }
+    .philosophy-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0; border: 1px solid var(--border); margin: 2rem 0; }
+    .philosophy-item {
+      padding: 1.2rem; border-right: 1px solid var(--border);
+      border-bottom: 1px solid var(--border); display: flex; gap: 0.8rem;
+    }
+    .philosophy-item:nth-child(2n) { border-right: none; }
+    .philosophy-item:nth-last-child(-n+2) { border-bottom: none; }
+    .phil-dash { color: var(--gold); font-size: 0.8rem; flex-shrink: 0; margin-top: 1px; }
+    .phil-text { font-size: 0.8rem; color: var(--muted2); }
+    .genres-wrap { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.5rem; }
+    .genre-tag {
+      font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase;
+      padding: 0.3rem 0.9rem; border: 1px solid var(--border2); color: var(--muted2);
+      transition: all 0.3s;
+    }
+    .genre-tag:hover { border-color: var(--gold); color: var(--gold); }
+
+    /* ===================== CONTACT ===================== */
+    .contact-layout { display: grid; grid-template-columns: 400px 1fr; gap: 6rem; align-items: start; }
+    .contact-info-block { display: flex; flex-direction: column; gap: 2.5rem; }
+    .contact-group { }
+    .contact-label { font-size: 0.65rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.5rem; }
+    .contact-value { font-size: 0.92rem; color: var(--text2); }
+    .social-row { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 0.8rem; }
+    .social-btn {
+      font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase;
+      padding: 0.5rem 1rem; border: 1px solid var(--border2);
+      color: var(--muted2); cursor: pointer; transition: all 0.3s; background: none;
+    }
+    .social-btn:hover { border-color: var(--gold); color: var(--gold); }
+
+    /* ===================== PAGE HERO (inner pages) ===================== */
+    .page-hero {
+      padding: 10rem 4rem 5rem;
+      max-width: 1280px; margin: 0 auto;
+      border-bottom: 1px solid var(--border);
+    }
+
+    /* ===================== SERVICES DETAIL ===================== */
+    .service-detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: start; }
+    .includes-list { list-style: none; border-top: 1px solid var(--border); margin-top: 1.5rem; }
+    .includes-list li {
+      display: flex; gap: 0.9rem; padding: 0.9rem 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.85rem; color: var(--muted2); align-items: center;
+    }
+    .includes-list li::before { content: '—'; color: var(--gold); flex-shrink: 0; }
+    .turnaround-cards { display: flex; flex-direction: column; gap: 1px; border: 1px solid var(--border); }
+    .turnaround-card {
+      padding: 1.5rem; background: var(--card); border-bottom: 1px solid var(--border);
+    }
+    .turnaround-card:last-child { border-bottom: none; }
+    .turnaround-name { font-family: 'Syne', sans-serif; font-size: 0.9rem; font-weight: 700; color: var(--text); margin-bottom: 0.3rem; }
+    .turnaround-detail { font-size: 0.8rem; color: var(--muted2); }
+
+    /* ===================== CTA SECTION ===================== */
+    .cta-section {
+      background: var(--bg2); border-top: 1px solid var(--border);
+      text-align: center; padding: 9rem 2rem;
+    }
+    .cta-section .section-title { max-width: 700px; margin: 0 auto 1.2rem; }
+    .cta-section .section-body { margin: 0 auto 3rem; text-align: center; }
+
+    /* ===================== FOOTER ===================== */
+    footer {
+      border-top: 1px solid var(--border);
+      background: var(--bg);
+    }
+    .footer-main {
+      max-width: 1280px; margin: 0 auto; padding: 4rem 4rem 3rem;
+      display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr; gap: 4rem;
+    }
+    .footer-brand-col {}
+    .footer-logo {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.5rem; font-weight: 800; color: var(--text);
+      margin-bottom: 1rem; display: block;
+    }
+    .footer-logo .dot { color: var(--gold); }
+    .footer-tagline { font-size: 0.8rem; color: var(--muted); line-height: 1.7; max-width: 220px; }
+    .footer-col-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 0.78rem; font-weight: 700; letter-spacing: 0.14em;
+      text-transform: uppercase; color: var(--text2);
+      margin-bottom: 1.2rem;
+    }
+    .footer-links { list-style: none; display: flex; flex-direction: column; gap: 0.7rem; }
+    .footer-links a {
+      font-size: 0.82rem; color: var(--muted);
+      cursor: pointer; transition: color 0.3s; text-decoration: none;
+    }
+    .footer-links a:hover { color: var(--gold); }
+    .footer-bottom {
+      max-width: 1280px; margin: 0 auto;
+      padding: 1.5rem 4rem;
+      border-top: 1px solid var(--border);
+      display: flex; justify-content: space-between; align-items: center; gap: 1rem; flex-wrap: wrap;
+    }
+    .footer-copy { font-size: 0.72rem; color: var(--muted); }
+    .footer-badges { display: flex; gap: 1rem; align-items: center; }
+    .footer-badge {
+      font-size: 0.65rem; letter-spacing: 0.12em; text-transform: uppercase;
+      padding: 0.28rem 0.8rem; border: 1px solid var(--border);
+      color: var(--muted);
+    }
+
+    /* ===================== SCROLL ANIMATIONS ===================== */
+    .reveal {
+      opacity: 0; transform: translateY(28px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* ===================== TOAST ===================== */
+    #toast {
+      position: fixed; bottom: 2rem; right: 2rem; z-index: 9000;
+      background: var(--card); border: 1px solid var(--border2);
+      padding: 1rem 1.5rem; font-size: 0.85rem; color: var(--text2);
+      transform: translateY(100px); opacity: 0;
+      transition: all 0.4s; max-width: 320px;
+      display: flex; gap: 0.8rem; align-items: flex-start;
+    }
+    #toast.show { transform: translateY(0); opacity: 1; }
+    #toast .toast-icon { color: var(--gold); flex-shrink: 0; }
+
+    /* ===================== RESPONSIVE ===================== */
+    @media (max-width: 1024px) {
+      .services-grid { grid-template-columns: repeat(2, 1fr); }
+      .service-card:nth-child(2) { border-right: none; }
+      .service-card:nth-child(3) { border-right: 1px solid var(--border); }
+      .service-card:nth-child(3), .service-card:nth-child(4) { border-top: 1px solid var(--border); }
+      .pricing-grid { grid-template-columns: repeat(2, 1fr); }
+      .price-card:nth-child(2) { border-right: none; }
+      .price-card:nth-child(3) { border-top: 1px solid var(--border); border-right: 1px solid var(--border); }
+      .price-card:nth-child(4) { border-top: 1px solid var(--border); border-right: none; }
+      .testimonials-grid { grid-template-columns: 1fr; }
+      .testimonial-card { border-right: none; border-bottom: 1px solid var(--border); }
+      .testimonial-card:last-child { border-bottom: none; }
+      .about-layout { grid-template-columns: 1fr; }
+      .about-visual { position: static; }
+      .contact-layout { grid-template-columns: 1fr; gap: 3rem; }
+      .footer-main { grid-template-columns: 1fr 1fr; gap: 3rem; }
+    }
+
+    @media (max-width: 768px) {
+      .section, .section-slim { padding: 5rem 1.5rem; }
+      .section-inner { padding: 0 1.5rem; }
+      .section-full-bleed { padding: 5rem 0; }
+      .page-hero { padding: 8rem 1.5rem 3rem; }
+      .services-grid { grid-template-columns: 1fr; }
+      .service-card { border-right: none; border-bottom: 1px solid var(--border); }
+      .pricing-grid { grid-template-columns: 1fr; }
+      .price-card { border-right: none; border-bottom: 1px solid var(--border); border-top: none !important; }
+      .price-card:first-child { border-top: none; }
+      .stats-bar { flex-wrap: wrap; }
+      .stat-item { min-width: 50%; border-bottom: 1px solid var(--border); }
+      .form-grid { grid-template-columns: 1fr; }
+      .service-detail-grid { grid-template-columns: 1fr; gap: 3rem; }
+      .footer-main { grid-template-columns: 1fr 1fr; gap: 2rem; padding: 3rem 1.5rem; }
+      .footer-bottom { padding: 1.5rem; }
+      #navbar { padding: 0 1.5rem; }
+      .nav-center, .nav-btn { display: none; }
+      .hamburger { display: flex; }
+      .demo-body { padding: 1.5rem; }
+      .philosophy-grid { grid-template-columns: 1fr; }
+      .philosophy-item { border-right: none !important; }
+      .hero-h1 { font-size: 2.8rem; }
+    }
+
+    @media (max-width: 480px) {
+      .stats-bar { flex-direction: column; }
+      .stat-item { min-width: 100%; max-width: 100%; }
+      .trust-strip { display: none; }
+      .footer-main { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- CURSOR -->
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- TOAST -->
+<div id="toast">
+  <span class="toast-icon">✓</span>
+  <span id="toastMsg">Action completed.</span>
+</div>
+
+<!-- ==================== NAVBAR ==================== -->
+<nav id="navbar">
+  <a class="nav-logo" onclick="showPage('home')">DGUNZ<span class="dot">.</span>AUDIO</a>
+  <ul class="nav-center">
+    <li><a onclick="showPage('mixing')">Mixing</a></li>
+    <li><a onclick="showPage('mastering')">Mastering</a></li>
+    <li><a onclick="showPage('demos')">Demos</a></li>
+    <li><a onclick="showPage('pricing')">Pricing</a></li>
+    <li><a onclick="showPage('about')">About</a></li>
+    <li><a onclick="showPage('contact')">Contact</a></li>
+  </ul>
+  <button class="nav-btn" onclick="showPage('upload')">Upload Track</button>
+  <button class="hamburger" id="hamburger" onclick="toggleMobileMenu()" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobileMenu">
+  <a onclick="showPage('mixing');toggleMobileMenu()">Mixing</a>
+  <a onclick="showPage('mastering');toggleMobileMenu()">Mastering</a>
+  <a onclick="showPage('demos');toggleMobileMenu()">Demos</a>
+  <a onclick="showPage('pricing');toggleMobileMenu()">Pricing</a>
+  <a onclick="showPage('about');toggleMobileMenu()">About</a>
+  <a onclick="showPage('contact');toggleMobileMenu()">Contact</a>
+  <button class="nav-btn" onclick="showPage('upload');toggleMobileMenu()" style="margin-top:2rem;text-align:center;">Upload Track</button>
+</div>
+
+<!-- ==================== PAGE: HOME ==================== -->
+<div id="page-home" class="page active">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-glow"></div>
+    <div class="hero-glow2"></div>
+    <div class="hero-grid-bg"></div>
+    <div class="hero-content">
+      <div class="eyebrow">Professional Audio Engineering</div>
+      <h1 class="hero-h1">
+        Your Music,
+        <span class="line2">Elevated</span>
+        to <span class="gold">Release-Ready.</span>
+      </h1>
+      <p class="hero-sub">
+        DGUNZ Audio delivers commercial-grade mixing and mastering for artists who demand the best. Every element balanced. Every detail perfected. Every platform optimized.
+      </p>
+      <div class="hero-ctas">
+        <button class="btn-gold" onclick="showPage('upload')">Upload Your Track</button>
+        <button class="btn-ghost" onclick="showPage('demos')">Hear the Difference</button>
+      </div>
+    </div>
+    <div class="hero-scroll-hint">
+      <div class="scroll-line"></div>
+      <span class="scroll-text">Scroll</span>
+    </div>
+  </section>
+
+  <!-- STATS BAR -->
+  <div class="stats-bar">
+    <div class="stat-item"><span class="stat-num">2M+</span><span class="stat-label">Streams Worldwide</span></div>
+    <div class="stat-item"><span class="stat-num">15+</span><span class="stat-label">Years Experience</span></div>
+    <div class="stat-item"><span class="stat-num">500+</span><span class="stat-label">Records Engineered</span></div>
+    <div class="stat-item"><span class="stat-num">14+</span><span class="stat-label">Genres Served</span></div>
+  </div>
+
+  <!-- TRUST STRIP -->
+  <div class="trust-strip">
+    <div class="trust-item"><div class="trust-dot"></div><span class="trust-text">Distinction — Point Blank Music School, London</span></div>
+    <div class="trust-item"><div class="trust-dot"></div><span class="trust-text">Apple Digital Masters Certified</span></div>
+    <div class="trust-item"><div class="trust-dot"></div><span class="trust-text">Former UMG Nigeria</span></div>
+    <div class="trust-item"><div class="trust-dot"></div><span class="trust-text">Spotify Artist · 2M+ Streams</span></div>
+    <div class="trust-item"><div class="trust-dot"></div><span class="trust-text">Streaming-Optimized Masters</span></div>
+    <div class="trust-item"><div class="trust-dot"></div><span class="trust-text">Based Globally · Works Worldwide</span></div>
+  </div>
+
+  <!-- SERVICES -->
+  <section class="section reveal">
+    <span class="section-label">What We Do</span>
+    <h2 class="section-title">Professional Services<br>Built for Serious Artists</h2>
+    <div class="services-grid">
+      <div class="service-card" onclick="showPage('mixing')">
+        <div class="service-icon-wrap">🎚</div>
+        <div class="service-name">Mixing</div>
+        <div class="service-desc">Every stem balanced, shaped, and placed with surgical precision. EQ, compression, spatial imaging, and creative effects tailored to your genre.</div>
+        <span class="service-link">Explore Mixing →</span>
+      </div>
+      <div class="service-card" onclick="showPage('mastering')">
+        <div class="service-icon-wrap">💿</div>
+        <div class="service-name">Mastering</div>
+        <div class="service-desc">The final polish that makes your music hit hard across every speaker, headphone, and streaming platform on earth.</div>
+        <span class="service-link">Explore Mastering →</span>
+      </div>
+      <div class="service-card" onclick="showPage('mastering')">
+        <div class="service-icon-wrap">🎧</div>
+        <div class="service-name">Spatial Audio</div>
+        <div class="service-desc">Next-generation immersive mixing for artists who want to lead the future of music consumption and immersive listening formats.</div>
+        <span class="service-link">Learn More →</span>
+      </div>
+      <div class="service-card" onclick="showPage('mixing')">
+        <div class="service-icon-wrap">🎤</div>
+        <div class="service-name">Vocal Production</div>
+        <div class="service-desc">Melodyne pitch correction, VocAlign timing, breath removal, and custom vocal effects for absolute perfection on every line.</div>
+        <span class="service-link">Learn More →</span>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- DEMO PREVIEW -->
+  <section class="section-full-bleed demos-bg reveal">
+    <div class="section-inner">
+      <span class="section-label">A/B Comparison</span>
+      <h2 class="section-title">Hear the Transformation</h2>
+      <p class="section-body" style="margin-bottom:3rem">Toggle between the raw recording and the engineered version. The difference is immediate — and it's permanent.</p>
+      <div class="demo-wrap">
+        <div class="demo-track-list">
+          <button class="demo-track-btn active" onclick="selectTrack(0, this)">Soul Ascension</button>
+          <button class="demo-track-btn" onclick="selectTrack(1, this)">Street Symphony</button>
+          <button class="demo-track-btn" onclick="selectTrack(2, this)">Lagos Nights</button>
+          <button class="demo-track-btn" onclick="selectTrack(3, this)">Gospel Fire</button>
+        </div>
+        <div class="demo-body">
+          <div class="demo-header">
+            <div class="demo-info">
+              <div class="demo-title" id="demoTitle">Soul Ascension</div>
+              <div class="demo-tags">
+                <span class="tag" id="demoGenre">R&B / Soul</span>
+                <span class="tag">Mixing + Mastering</span>
+              </div>
+              <div class="demo-note" id="demoNote">Vocal clarity, depth & spatial transformation</div>
+            </div>
+            <div>
+              <div class="ab-switch">
+                <button class="ab-btn active" id="abBefore" onclick="setABState('before')">Before</button>
+                <button class="ab-btn" id="abAfter" onclick="setABState('after')">After</button>
+              </div>
+              <div class="state-label" id="stateLabel">RAW RECORDING</div>
+            </div>
+          </div>
+          <div class="waveform-container" id="waveformContainer">
+            <div class="playhead" id="playhead"></div>
+          </div>
+          <div class="player-controls">
+            <button class="play-btn" id="playBtn" onclick="togglePlay()">▶</button>
+            <div class="progress-track" onclick="seekAudio(event)">
+              <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <div class="time-display" id="timeDisplay">0:00 / 2:30</div>
+          </div>
+        </div>
+      </div>
+      <div style="margin-top:2rem;text-align:right">
+        <button class="btn-ghost" onclick="showPage('demos')">View All Demos →</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section class="section reveal">
+    <span class="section-label">The Process</span>
+    <h2 class="section-title">Simple. Precise.<br>Consistently Powerful.</h2>
+    <div class="steps-list">
+      <div class="step-item">
+        <div class="step-num-big">01</div>
+        <div><div class="step-title">Upload Your Files</div><div class="step-desc">Submit your stems, rough mix, and reference tracks through our secure portal. We accept all major DAW formats — WAV, AIFF, FLAC, and ZIP stem packs.</div></div>
+      </div>
+      <div class="step-item">
+        <div class="step-num-big">02</div>
+        <div><div class="step-title">Project Review</div><div class="step-desc">DGUNZ personally reviews your project, listens to your references and creative vision, then prepares a tailored engineering approach specific to your track.</div></div>
+      </div>
+      <div class="step-item">
+        <div class="step-num-big">03</div>
+        <div><div class="step-title">Mix & Master</div><div class="step-desc">Your track is engineered with precision — every frequency balanced, every element placed, every dynamic carefully shaped for maximum emotional and sonic impact.</div></div>
+      </div>
+      <div class="step-item">
+        <div class="step-num-big">04</div>
+        <div><div class="step-title">Revisions</div><div class="step-desc">Review your mix and request changes freely. We refine until it's exactly what you envisioned — your satisfaction and creative vision come first, always.</div></div>
+      </div>
+      <div class="step-item">
+        <div class="step-num-big">05</div>
+        <div><div class="step-title">Final Delivery</div><div class="step-desc">Receive your release-ready files in WAV, MP3, and stems — fully optimized for Spotify, Apple Music, YouTube, radio, and club playback systems.</div></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- PRICING PREVIEW -->
+  <section class="section-full-bleed reveal" style="background:var(--bg2)">
+    <div class="section-inner">
+      <span class="section-label">Transparent Pricing</span>
+      <h2 class="section-title">Choose Your Package</h2>
+      <div class="pricing-grid" id="homePricingGrid">
+        <!-- Populated by JS -->
+      </div>
+      <div style="margin-top:2rem;text-align:center">
+        <button class="btn-ghost" onclick="showPage('pricing')">View Full Pricing & Add-Ons →</button>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- TESTIMONIALS -->
+  <section class="section reveal">
+    <span class="section-label">Social Proof</span>
+    <h2 class="section-title">Artists Trust DGUNZ</h2>
+    <div class="testimonials-grid">
+      <div class="testimonial-card">
+        <div class="stars">★★★★★</div>
+        <div class="quote-text"><span class="quote-mark">"</span>DGUNZ transformed my record. The mix hit different — clear vocals, punchy 808s, wide and clean. My listeners immediately noticed the upgrade on every single platform.</div>
+        <div class="quote-author">Marcus T.</div>
+        <div class="quote-role">Independent Hip-Hop Artist</div>
+      </div>
+      <div class="testimonial-card">
+        <div class="stars">★★★★★</div>
+        <div class="quote-text"><span class="quote-mark">"</span>I've worked with engineers across three continents. DGUNZ delivers a level of detail, warmth, and clarity that very few can match. Every project, every time — without fail.</div>
+        <div class="quote-author">Adaeze K.</div>
+        <div class="quote-role">Afrobeats Producer</div>
+      </div>
+      <div class="testimonial-card">
+        <div class="stars">★★★★★</div>
+        <div class="quote-text"><span class="quote-mark">"</span>The mastered version of my EP sounds like it belongs on Spotify's editorial playlists. Professional, polished, and emotionally true to my creative vision.</div>
+        <div class="quote-author">Jordan M.</div>
+        <div class="quote-role">Singer-Songwriter</div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- FAQ PREVIEW -->
+  <section class="section reveal" style="background:var(--bg2)">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:start">
+      <div>
+        <span class="section-label">Common Questions</span>
+        <h2 class="section-title">Frequently Asked</h2>
+        <p class="section-body">Everything you need to know before submitting your project. Still have questions? <a onclick="showPage('contact')" style="color:var(--gold);cursor:pointer;">Contact us directly.</a></p>
+      </div>
+      <div class="faq-list" id="faqList">
+        <!-- Populated by JS -->
+      </div>
+    </div>
+  </section>
+
+  <!-- FINAL CTA -->
+  <div class="cta-section reveal">
+    <span class="section-label">Ready to Start?</span>
+    <h2 class="section-title">Get Your Song<br>Release-Ready.</h2>
+    <p class="section-body">From raw stems to a polished, streaming-optimized master. Submit your project today and let DGUNZ handle the rest.</p>
+    <div class="hero-ctas">
+      <button class="btn-gold" onclick="showPage('upload')">Start Your Project</button>
+      <button class="btn-ghost" onclick="showPage('contact')">Ask a Question</button>
+    </div>
+  </div>
+
+</div><!-- /page-home -->
+
+<!-- ==================== PAGE: MIXING ==================== -->
+<div id="page-mixing" class="page">
+  <div class="page-hero">
+    <span class="section-label">Services</span>
+    <h1 class="section-title">Professional<br>Mixing</h1>
+    <p class="section-body">Every element of your track shaped, balanced, and placed with surgical precision for maximum sonic impact.</p>
+  </div>
+  <section class="section">
+    <div class="service-detail-grid">
+      <div>
+        <span class="section-label">What's Included</span>
+        <h2 class="section-title" style="font-size:1.8rem">Full Mixing Service</h2>
+        <p style="font-size:0.88rem;color:var(--muted2);line-height:1.8;margin-bottom:1.5rem">
+          Mixing is the process where individual elements of a song are balanced and shaped into a cohesive, powerful record. DGUNZ approaches every mix with the goal of creating a sound that translates perfectly across all listening environments.
+        </p>
+        <ul class="includes-list">
+          <li>EQ and frequency shaping per track</li>
+          <li>Compression and dynamic control</li>
+          <li>Pitch correction (Auto-Tune where appropriate)</li>
+          <li>De-essing for vocal clarity</li>
+          <li>Multi-band compression</li>
+          <li>Stereo panning and spatial imaging</li>
+          <li>Level balancing across all stems</li>
+          <li>Automation — volume, effects, transitions</li>
+          <li>Reverb, delay, and creative effects design</li>
+        </ul>
+      </div>
+      <div>
+        <span class="section-label">Turnaround & Revisions</span>
+        <div class="turnaround-cards" style="margin-top:1.5rem;margin-bottom:2rem">
+          <div class="turnaround-card"><div class="turnaround-name">Standard</div><div class="turnaround-detail">5–7 business days · 2 revisions included</div></div>
+          <div class="turnaround-card"><div class="turnaround-name">Premium</div><div class="turnaround-detail">3–5 business days · Unlimited revisions</div></div>
+          <div class="turnaround-card"><div class="turnaround-name">Rush</div><div class="turnaround-detail">24–48 hours · +$79 add-on</div></div>
+        </div>
+        <span class="section-label">Who It's For</span>
+        <ul class="includes-list" style="margin-top:0.8rem">
+          <li>Independent artists releasing singles or EPs</li>
+          <li>Producers who need a polished reference mix</li>
+          <li>Albums and full-length projects</li>
+          <li>Content creators and sync licensing projects</li>
+        </ul>
+        <button class="btn-gold" style="margin-top:2rem" onclick="showPage('upload')">Book Your Mix →</button>
+      </div>
+    </div>
+  </section>
+  <div class="cta-section">
+    <span class="section-label">Get Started</span>
+    <h2 class="section-title">Ready to Mix?</h2>
+    <p class="section-body">Submit your stems and let DGUNZ deliver the professional mix your music deserves.</p>
+    <div class="hero-ctas" style="justify-content:center;margin-top:2rem">
+      <button class="btn-gold" onclick="showPage('upload')">Upload Your Stems</button>
+      <button class="btn-ghost" onclick="showPage('pricing')">View Pricing</button>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== PAGE: MASTERING ==================== -->
+<div id="page-mastering" class="page">
+  <div class="page-hero">
+    <span class="section-label">Services</span>
+    <h1 class="section-title">World-Class<br>Mastering</h1>
+    <p class="section-body">The final stage that transforms your mix into a commercial-grade master ready for global release on every platform.</p>
+  </div>
+  <section class="section">
+    <div class="service-detail-grid">
+      <div>
+        <span class="section-label">What's Included</span>
+        <h2 class="section-title" style="font-size:1.8rem">Full Mastering Service</h2>
+        <p style="font-size:0.88rem;color:var(--muted2);line-height:1.8;margin-bottom:1.5rem">
+          Mastering is the final stage that prepares your music for professional release. DGUNZ applies Apple Digital Masters certified techniques to ensure every master sounds incredible across every platform and playback system.
+        </p>
+        <ul class="includes-list">
+          <li>Dynamic EQ adjustments and tonal balancing</li>
+          <li>Multi-band compression for controlled dynamics</li>
+          <li>Harmonic saturation for warmth and character</li>
+          <li>Stereo widening via Mid-Side processing</li>
+          <li>Loudness optimization (LUFS targeting per platform)</li>
+          <li>True Peak limiting</li>
+          <li>Streaming platform compatibility (Spotify, Apple, YouTube)</li>
+          <li>Apple Digital Masters standard compliance</li>
+          <li>Dithering for bit-depth reduction</li>
+        </ul>
+      </div>
+      <div>
+        <span class="section-label">Stereo vs Stem Mastering</span>
+        <div class="turnaround-cards" style="margin-top:1.5rem;margin-bottom:2rem">
+          <div class="turnaround-card">
+            <div class="turnaround-name">Stereo Mastering</div>
+            <div class="turnaround-detail">Full stereo mix processed and optimized. Ideal for most releases.</div>
+          </div>
+          <div class="turnaround-card">
+            <div class="turnaround-name">Stem Mastering</div>
+            <div class="turnaround-detail">Individual stems processed separately for maximum control and precision. +$99 add-on.</div>
+          </div>
+          <div class="turnaround-card">
+            <div class="turnaround-name">Spatial / Immersive</div>
+            <div class="turnaround-detail">Next-gen immersive audio format mastering for Dolby Atmos compatible platforms.</div>
+          </div>
+        </div>
+        <span class="section-label">Turnaround</span>
+        <div class="turnaround-cards" style="margin-top:0.8rem;margin-bottom:2rem">
+          <div class="turnaround-card"><div class="turnaround-name">Standard</div><div class="turnaround-detail">2–3 business days · 2 revisions</div></div>
+          <div class="turnaround-card"><div class="turnaround-name">Rush</div><div class="turnaround-detail">24 hours · +$79 add-on</div></div>
+        </div>
+        <button class="btn-gold" onclick="showPage('upload')">Book Your Master →</button>
+      </div>
+    </div>
+  </section>
+  <div class="cta-section">
+    <span class="section-label">Get Started</span>
+    <h2 class="section-title">Ready to Master?</h2>
+    <p class="section-body">Upload your final mix and receive a competitive, streaming-ready master that stands up on every platform.</p>
+    <div class="hero-ctas" style="justify-content:center;margin-top:2rem">
+      <button class="btn-gold" onclick="showPage('upload')">Upload Your Mix</button>
+      <button class="btn-ghost" onclick="showPage('pricing')">View Pricing</button>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== PAGE: DEMOS ==================== -->
+<div id="page-demos" class="page">
+  <div class="page-hero">
+    <span class="section-label">Before & After</span>
+    <h1 class="section-title">Hear the Engineering</h1>
+    <p class="section-body">Real tracks. Real transformations. Toggle between raw recordings and fully engineered mixes to experience the DGUNZ difference for yourself.</p>
+  </div>
+  <section class="section">
+    <div class="demo-wrap">
+      <div class="demo-track-list">
+        <button class="demo-track-btn active" onclick="selectTrack2(0, this)">Soul Ascension</button>
+        <button class="demo-track-btn" onclick="selectTrack2(1, this)">Street Symphony</button>
+        <button class="demo-track-btn" onclick="selectTrack2(2, this)">Lagos Nights</button>
+        <button class="demo-track-btn" onclick="selectTrack2(3, this)">Gospel Fire</button>
+      </div>
+      <div class="demo-body">
+        <div class="demo-header">
+          <div class="demo-info">
+            <div class="demo-title" id="demoTitle2">Soul Ascension</div>
+            <div class="demo-tags">
+              <span class="tag" id="demoGenre2">R&B / Soul</span>
+              <span class="tag">Mixing + Mastering</span>
+            </div>
+            <div class="demo-note" id="demoNote2">Vocal clarity, depth & spatial transformation</div>
+          </div>
+          <div>
+            <div class="ab-switch">
+              <button class="ab-btn active" id="abBefore2" onclick="setABState2('before')">⬤ Before</button>
+              <button class="ab-btn" id="abAfter2" onclick="setABState2('after')">⬤ After</button>
+            </div>
+            <div class="state-label" id="stateLabel2">RAW RECORDING</div>
+          </div>
+        </div>
+        <div class="waveform-container" id="waveformContainer2">
+          <div class="playhead" id="playhead2"></div>
+        </div>
+        <div class="player-controls">
+          <button class="play-btn" id="playBtn2" onclick="togglePlay2()">▶</button>
+          <div class="progress-track" onclick="seekAudio2(event)">
+            <div class="progress-fill" id="progressFill2"></div>
+          </div>
+          <div class="time-display" id="timeDisplay2">0:00 / 2:30</div>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top:4rem">
+      <span class="section-label">All Comparisons</span>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:1px;border:1px solid var(--border);margin-top:1.5rem;background:var(--border)">
+        <div class="service-card" onclick="selectTrack2(0,document.querySelectorAll('#page-demos .demo-track-btn')[0]);document.querySelector('#page-demos .demo-wrap').scrollIntoView({behavior:'smooth'})">
+          <div class="service-icon-wrap">🎵</div>
+          <div class="service-name">Soul Ascension</div>
+          <div class="demo-tags" style="margin:0.5rem 0"><span class="tag">R&B / Soul</span></div>
+          <div class="demo-note">Vocal clarity & depth transformation</div>
+          <span class="service-link">Compare →</span>
+        </div>
+        <div class="service-card" onclick="selectTrack2(1,document.querySelectorAll('#page-demos .demo-track-btn')[1]);document.querySelector('#page-demos .demo-wrap').scrollIntoView({behavior:'smooth'})">
+          <div class="service-icon-wrap">🎵</div>
+          <div class="service-name">Street Symphony</div>
+          <div class="demo-tags" style="margin:0.5rem 0"><span class="tag">Hip-Hop</span></div>
+          <div class="demo-note">Punch, presence & stereo imaging</div>
+          <span class="service-link">Compare →</span>
+        </div>
+        <div class="service-card" onclick="selectTrack2(2,document.querySelectorAll('#page-demos .demo-track-btn')[2]);document.querySelector('#page-demos .demo-wrap').scrollIntoView({behavior:'smooth'})">
+          <div class="service-icon-wrap">🎵</div>
+          <div class="service-name">Lagos Nights</div>
+          <div class="demo-tags" style="margin:0.5rem 0"><span class="tag">Afrobeats</span></div>
+          <div class="demo-note">Groove, warmth & commercial polish</div>
+          <span class="service-link">Compare →</span>
+        </div>
+        <div class="service-card" onclick="selectTrack2(3,document.querySelectorAll('#page-demos .demo-track-btn')[3]);document.querySelector('#page-demos .demo-wrap').scrollIntoView({behavior:'smooth'})">
+          <div class="service-icon-wrap">🎵</div>
+          <div class="service-name">Gospel Fire</div>
+          <div class="demo-tags" style="margin:0.5rem 0"><span class="tag">Gospel</span></div>
+          <div class="demo-note">Separation, dynamics & power</div>
+          <span class="service-link">Compare →</span>
+        </div>
+      </div>
+    </div>
+  </section>
+  <div class="cta-section">
+    <span class="section-label">Convinced?</span>
+    <h2 class="section-title">Start Your Project Today</h2>
+    <p class="section-body">Submit your track and experience the DGUNZ difference on your own music.</p>
+    <div class="hero-ctas" style="justify-content:center;margin-top:2rem">
+      <button class="btn-gold" onclick="showPage('upload')">Upload Your Track</button>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== PAGE: PRICING ==================== -->
+<div id="page-pricing" class="page">
+  <div class="page-hero">
+    <span class="section-label">Investment</span>
+    <h1 class="section-title">Transparent Pricing.<br>No Surprises.</h1>
+    <p class="section-body">Every package is designed to deliver maximum value. Choose the tier that matches your project, and DGUNZ will handle the rest.</p>
+  </div>
+  <section class="section">
+    <div class="pricing-grid" id="fullPricingGrid">
+      <!-- Populated by JS -->
+    </div>
+
+    <div style="margin-top:5rem;border-top:1px solid var(--border);padding-top:4rem">
+      <span class="section-label">Add-Ons</span>
+      <h2 class="section-title" style="font-size:2rem;margin-bottom:2rem">Precision Add-On Services</h2>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:1px;border:1px solid var(--border);background:var(--border)">
+        <div class="service-card" style="cursor:default">
+          <div class="service-name" style="font-size:0.9rem">Vocal Tuning (Melodyne)</div>
+          <div style="font-family:'Syne',sans-serif;color:var(--gold);font-weight:700;font-size:1.3rem;margin-top:0.5rem">+$49</div>
+          <div class="service-desc" style="font-size:0.78rem;margin-top:0.5rem">Manual pitch correction using Melodyne</div>
+        </div>
+        <div class="service-card" style="cursor:default">
+          <div class="service-name" style="font-size:0.9rem">VocAlign Timing</div>
+          <div style="font-family:'Syne',sans-serif;color:var(--gold);font-weight:700;font-size:1.3rem;margin-top:0.5rem">+$39</div>
+          <div class="service-desc" style="font-size:0.78rem;margin-top:0.5rem">Manual vocal timing alignment</div>
+        </div>
+        <div class="service-card" style="cursor:default">
+          <div class="service-name" style="font-size:0.9rem">Breath & Noise Removal</div>
+          <div style="font-family:'Syne',sans-serif;color:var(--gold);font-weight:700;font-size:1.3rem;margin-top:0.5rem">+$29</div>
+          <div class="service-desc" style="font-size:0.78rem;margin-top:0.5rem">Pops, clicks, breaths & artifacts cleanup</div>
+        </div>
+        <div class="service-card" style="cursor:default">
+          <div class="service-name" style="font-size:0.9rem">Rush Delivery (48hr)</div>
+          <div style="font-family:'Syne',sans-serif;color:var(--gold);font-weight:700;font-size:1.3rem;margin-top:0.5rem">+$79</div>
+          <div class="service-desc" style="font-size:0.78rem;margin-top:0.5rem">Priority queue, delivery within 48 hours</div>
+        </div>
+        <div class="service-card" style="cursor:default">
+          <div class="service-name" style="font-size:0.9rem">Extra Revision</div>
+          <div style="font-family:'Syne',sans-serif;color:var(--gold);font-weight:700;font-size:1.3rem;margin-top:0.5rem">+$25</div>
+          <div class="service-desc" style="font-size:0.78rem;margin-top:0.5rem">Additional revision beyond package limit</div>
+        </div>
+        <div class="service-card" style="cursor:default">
+          <div class="service-name" style="font-size:0.9rem">Stem Mastering</div>
+          <div style="font-family:'Syne',sans-serif;color:var(--gold);font-weight:700;font-size:1.3rem;margin-top:0.5rem">+$99</div>
+          <div class="service-desc" style="font-size:0.78rem;margin-top:0.5rem">Individual stem processing for maximum control</div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <div class="cta-section">
+    <span class="section-label">Ready?</span>
+    <h2 class="section-title">Book Your Package</h2>
+    <p class="section-body">Submit your project and we'll get your music sounding release-ready.</p>
+    <div class="hero-ctas" style="justify-content:center;margin-top:2rem">
+      <button class="btn-gold" onclick="showPage('upload')">Start Your Project</button>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== PAGE: ABOUT ==================== -->
+<div id="page-about" class="page">
+  <div class="page-hero">
+    <span class="section-label">The Engineer</span>
+    <h1 class="section-title">Meet DGUNZ</h1>
+    <p class="section-body">The architect behind the sound. Every project personally engineered, supervised, and delivered.</p>
+  </div>
+  <section class="section">
+    <div class="about-layout">
+      <div class="about-visual">
+        <div class="engineer-card">
+          <div class="engineer-placeholder">🎚</div>
+          <div class="engineer-overlay">
+            <div class="engineer-name">DGUNZ</div>
+            <div class="engineer-title">Lead Mixing & Mastering Engineer</div>
+          </div>
+        </div>
+        <div class="credentials">
+          <div class="credential-row"><div class="cred-dot"></div><div class="cred-text">Distinction — Mixing & Mastering, Point Blank Music School, London</div></div>
+          <div class="credential-row"><div class="cred-dot"></div><div class="cred-text">Apple Digital Masters Certified</div></div>
+          <div class="credential-row"><div class="cred-dot"></div><div class="cred-text">Managed by Universal Music Group (UMG Nigeria)</div></div>
+          <div class="credential-row"><div class="cred-dot"></div><div class="cred-text">Engineering since 2007 · 15+ years experience</div></div>
+          <div class="credential-row"><div class="cred-dot"></div><div class="cred-text">2M+ streams across global releases</div></div>
+        </div>
+      </div>
+      <div class="about-body">
+        <span class="section-label">The Story</span>
+        <p class="about-para" style="margin-top:1rem">DGUNZ is a professional mixing and mastering engineer dedicated to helping artists turn great recordings into powerful, release-ready music. As the Founder and Lead Engineer of DGUNZ Audio, he personally oversees every project to ensure the highest level of sonic quality and consistency.</p>
+        <p class="about-para">With a Distinction in Mixing & Mastering from Point Blank Music School (London) and certification in Apple Digital Masters, DGUNZ combines formal training with over a decade of hands-on experience shaping records across multiple genres.</p>
+        <p class="about-para">Earlier in his career, DGUNZ was managed by Universal Music Group (UMG) Nigeria, gaining invaluable industry exposure and experience working within professional music environments. Since beginning his engineering journey in 2007, he has worked with artists, producers, and content creators around the world.</p>
+        <p class="about-para">His engineering work has collectively reached over 2 million streams worldwide across Spotify, Apple Music, YouTube, radio, clubs, and immersive audio platforms.</p>
+
+        <span class="section-label" style="display:block;margin-top:2.5rem">Engineering Philosophy</span>
+        <div class="philosophy-grid" style="margin-top:1rem">
+          <div class="philosophy-item"><div class="phil-dash">—</div><div class="phil-text">Clean and balanced frequency spectrum</div></div>
+          <div class="philosophy-item"><div class="phil-dash">—</div><div class="phil-text">Powerful but controlled dynamics</div></div>
+          <div class="philosophy-item"><div class="phil-dash">—</div><div class="phil-text">Clear vocals and defined instrumentation</div></div>
+          <div class="philosophy-item"><div class="phil-dash">—</div><div class="phil-text">Depth and stereo imaging</div></div>
+          <div class="philosophy-item"><div class="phil-dash">—</div><div class="phil-text">Competitive loudness without distortion</div></div>
+          <div class="philosophy-item"><div class="phil-dash">—</div><div class="phil-text">Consistent playback across all systems</div></div>
+        </div>
+
+        <span class="section-label" style="display:block;margin-top:2.5rem">Genres Served</span>
+        <div class="genres-wrap" style="margin-top:1rem">
+          <span class="genre-tag">Hip-Hop</span><span class="genre-tag">Afrobeat</span><span class="genre-tag">Gospel</span>
+          <span class="genre-tag">Pop</span><span class="genre-tag">R&B</span><span class="genre-tag">Rock</span>
+          <span class="genre-tag">Punk</span><span class="genre-tag">Trap</span><span class="genre-tag">EDM</span>
+          <span class="genre-tag">House</span><span class="genre-tag">Reggae</span><span class="genre-tag">Folk</span>
+          <span class="genre-tag">Singer-Songwriter</span><span class="genre-tag">Alternative</span>
+        </div>
+
+        <span class="section-label" style="display:block;margin-top:2.5rem">Spotify</span>
+        <a href="https://open.spotify.com/artist/3l22ah9mu4QDWC32wRBN9j" target="_blank" rel="noopener" style="color:var(--gold);font-size:0.82rem;word-break:break-all">open.spotify.com/artist/3l22ah9mu4QDWC32wRBN9j</a>
+
+        <div style="margin-top:3rem">
+          <button class="btn-gold" onclick="showPage('upload')">Work With DGUNZ →</button>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ==================== PAGE: UPLOAD ==================== -->
+<div id="page-upload" class="page">
+  <div class="page-hero">
+    <span class="section-label">Submit Your Project</span>
+    <h1 class="section-title">Start Your Project</h1>
+    <p class="section-body">Fill in your project details and upload your files. DGUNZ will review your submission and respond within 24 hours to confirm details and next steps.</p>
+  </div>
+  <section class="section">
+    <div id="uploadForm">
+      <form id="orderForm" onsubmit="submitOrder(event)">
+        <div class="form-grid">
+          <div class="form-group">
+            <label class="form-label">Artist Name *</label>
+            <input class="form-input" type="text" name="artist" required placeholder="Your artist name" autocomplete="off" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Email Address *</label>
+            <input class="form-input" type="email" name="email" required placeholder="your@email.com" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Phone Number (Optional)</label>
+            <input class="form-input" type="tel" name="phone" placeholder="+1 (555) 000-0000" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Song Title *</label>
+            <input class="form-input" type="text" name="song" required placeholder="Track / Song title" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Service Type *</label>
+            <select class="form-select" name="service" required>
+              <option value="" disabled selected>Select a service</option>
+              <option>Basic Mixing — $149</option>
+              <option>Premium Mixing — $299</option>
+              <option>Mastering Only — $89</option>
+              <option>Mix + Master Bundle — $349</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Genre *</label>
+            <select class="form-select" name="genre" required>
+              <option value="" disabled selected>Select genre</option>
+              <option>Hip-Hop</option><option>Afrobeat</option><option>Gospel</option>
+              <option>Pop</option><option>R&B</option><option>Rock</option>
+              <option>Punk</option><option>Trap</option><option>EDM</option>
+              <option>House</option><option>Reggae</option><option>Folk</option>
+              <option>Singer-Songwriter</option><option>Alternative</option><option>Other</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">BPM</label>
+            <input class="form-input" type="number" name="bpm" placeholder="e.g. 140" min="40" max="300" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Key (Optional)</label>
+            <input class="form-input" type="text" name="key" placeholder="e.g. C Minor, G Major" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Turnaround Time *</label>
+            <select class="form-select" name="turnaround" required>
+              <option value="" disabled selected>Select turnaround</option>
+              <option>Standard (5–7 days)</option>
+              <option>Premium (3–5 days)</option>
+              <option>Rush (24–48 hours, +$79)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Package</label>
+            <select class="form-select" name="package">
+              <option value="" disabled selected>Confirm package</option>
+              <option>Basic Mixing — $149</option>
+              <option>Premium Mixing — $299</option>
+              <option>Mastering Only — $89</option>
+              <option>Mix + Master Bundle — $349</option>
+            </select>
+          </div>
+          <div class="form-group full">
+            <label class="form-label">Project Notes & Creative Direction</label>
+            <textarea class="form-textarea" name="notes" placeholder="Reference tracks, creative direction, specific requests, target vibe, loudness targets, anything that helps DGUNZ understand your vision..."></textarea>
+          </div>
+          <div class="form-group full">
+            <label class="form-label">Upload Files — Stems, Reference Track, Rough Mix</label>
+            <div class="drop-zone" id="dropZone"
+              ondragover="handleDragOver(event)"
+              ondragleave="handleDragLeave(event)"
+              ondrop="handleDrop(event)"
+              onclick="document.getElementById('fileInput').click()">
+              <div class="drop-icon">📂</div>
+              <div class="drop-text">Drag & drop your files here, or <span style="color:var(--gold)">click to browse</span></div>
+              <div class="drop-formats" style="margin-top:0.5rem">Accepted: WAV · AIFF · MP3 · FLAC · ZIP (stems) · Max 2GB per file</div>
+            </div>
+            <input type="file" id="fileInput" multiple accept=".wav,.aiff,.mp3,.flac,.zip,.aif" style="display:none" onchange="handleFileSelect(event)" />
+            <div class="file-list" id="fileList"></div>
+          </div>
+          <div class="form-group full">
+            <label class="checkbox-wrap">
+              <input type="checkbox" class="form-checkbox" name="terms" id="termsCheck" required />
+              <span class="checkbox-text">I agree to the terms of service and understand that payment is required before work begins. I confirm that I own or have obtained the necessary rights to all files submitted. I understand revisions are included as per the selected package.</span>
+            </label>
+          </div>
+        </div>
+        <div style="margin-top:2.5rem;display:flex;gap:1rem;align-items:center;flex-wrap:wrap">
+          <button type="submit" class="btn-gold" style="padding:1rem 3rem">Submit Project →</button>
+          <span style="font-size:0.75rem;color:var(--muted)">You'll receive a confirmation email within 24 hours</span>
+        </div>
+      </form>
+    </div>
+    <div id="uploadSuccess" style="display:none">
+      <div class="state-box">
+        <span class="state-icon">✓</span>
+        <div class="state-title">Project Submitted!</div>
+        <p class="state-msg">Your project has been received. DGUNZ will review your files and reach out within 24 hours to confirm details, payment, and next steps. Check your inbox for a confirmation.</p>
+        <button class="btn-gold" onclick="resetUploadForm()">Submit Another Project</button>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ==================== PAGE: CONTACT ==================== -->
+<div id="page-contact" class="page">
+  <div class="page-hero">
+    <span class="section-label">Get in Touch</span>
+    <h1 class="section-title">Let's Talk About<br>Your Music</h1>
+    <p class="section-body">Have questions before submitting? Want to discuss a larger project? Reach out — DGUNZ responds to all messages within 24 hours.</p>
+  </div>
+  <section class="section">
+    <div class="contact-layout">
+      <div class="contact-info-block">
+        <div class="contact-group">
+          <div class="contact-label">Email</div>
+          <div class="contact-value">contact@dgunzaudio.com</div>
+        </div>
+        <div class="contact-group">
+          <div class="contact-label">Response Time</div>
+          <div class="contact-value">Within 24 hours</div>
+        </div>
+        <div class="contact-group">
+          <div class="contact-label">Follow & Connect</div>
+          <div class="social-row">
+            <button class="social-btn" onclick="showToast('Instagram link coming soon')">Instagram</button>
+            <button class="social-btn" onclick="showToast('SoundCloud link coming soon')">SoundCloud</button>
+            <button class="social-btn" onclick="showToast('YouTube link coming soon')">YouTube</button>
+            <button class="social-btn" onclick="window.open('https://open.spotify.com/artist/3l22ah9mu4QDWC32wRBN9j','_blank')">Spotify</button>
+            <button class="social-btn" onclick="showToast('WhatsApp link coming soon')">WhatsApp</button>
+          </div>
+        </div>
+        <div class="contact-group">
+          <div class="contact-label">Quick Links</div>
+          <div style="display:flex;flex-direction:column;gap:0.5rem;margin-top:0.5rem">
+            <a onclick="showPage('upload')" style="color:var(--gold);font-size:0.85rem;cursor:pointer">→ Upload Your Track</a>
+            <a onclick="showPage('pricing')" style="color:var(--gold);font-size:0.85rem;cursor:pointer">→ View Pricing</a>
+            <a onclick="showPage('demos')" style="color:var(--gold);font-size:0.85rem;cursor:pointer">→ Hear Before & After</a>
+          </div>
+        </div>
+      </div>
+      <div>
+        <form id="contactForm" onsubmit="submitContact(event)">
+          <div class="form-grid">
+            <div class="form-group">
+              <label class="form-label">Name *</label>
+              <input class="form-input" type="text" name="name" required placeholder="Your name" />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Email *</label>
+              <input class="form-input" type="email" name="email" required placeholder="your@email.com" />
+            </div>
+            <div class="form-group full">
+              <label class="form-label">Subject</label>
+              <input class="form-input" type="text" name="subject" placeholder="What's this about?" />
+            </div>
+            <div class="form-group full">
+              <label class="form-label">Message *</label>
+              <textarea class="form-textarea" name="message" required placeholder="Tell us about your project or question..." style="min-height:180px"></textarea>
+            </div>
+          </div>
+          <button type="submit" class="btn-gold" style="margin-top:1.5rem;padding:1rem 2.5rem">Send Message →</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ on contact page -->
+  <section class="section" style="padding-top:0">
+    <span class="section-label">Common Questions</span>
+    <h2 class="section-title" style="font-size:2rem">Before You Reach Out</h2>
+    <div class="faq-list" id="faqListContact"></div>
+  </section>
+</div>
+
+<!-- ==================== FOOTER ==================== -->
+<footer>
+  <div class="footer-main">
+    <div class="footer-brand-col">
+      <span class="footer-logo">DGUNZ<span class="dot">.</span>AUDIO</span>
+      <div class="footer-tagline">Professional mixing and mastering for artists who demand the best. Apple Digital Masters certified. 2M+ streams engineered.</div>
+    </div>
+    <div>
+      <div class="footer-col-title">Services</div>
+      <ul class="footer-links">
+        <li><a onclick="showPage('mixing')">Mixing</a></li>
+        <li><a onclick="showPage('mastering')">Mastering</a></li>
+        <li><a onclick="showPage('mastering')">Spatial Audio</a></li>
+        <li><a onclick="showPage('mixing')">Vocal Production</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-col-title">Company</div>
+      <ul class="footer-links">
+        <li><a onclick="showPage('about')">About DGUNZ</a></li>
+        <li><a onclick="showPage('demos')">Before & After</a></li>
+        <li><a onclick="showPage('pricing')">Pricing</a></li>
+        <li><a onclick="showPage('contact')">Contact</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-col-title">Connect</div>
+      <ul class="footer-links">
+        <li><a href="https://open.spotify.com/artist/3l22ah9mu4QDWC32wRBN9j" target="_blank" rel="noopener">Spotify</a></li>
+        <li><a onclick="showToast('Instagram coming soon')">Instagram</a></li>
+        <li><a onclick="showToast('SoundCloud coming soon')">SoundCloud</a></li>
+        <li><a onclick="showToast('YouTube coming soon')">YouTube</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="footer-copy">© 2024 DGUNZ Audio. All rights reserved.</div>
+    <div class="footer-badges">
+      <span class="footer-badge">Apple Digital Masters</span>
+      <span class="footer-badge">Point Blank Music School</span>
+    </div>
+  </div>
+</footer>
+
+<!-- ==================== JAVASCRIPT ==================== -->
+<script>
+  /* ===== DATA ===== */
+  const PACKAGES = [
+    {
+      name: 'Basic Mixing', price: '$149', tier: 'Starter',
+      turnaround: '5–7 days', revisions: '2 revisions', delivery: 'WAV + MP3', featured: false,
+      features: ['Stem mixing up to 24 tracks', 'EQ & compression per track', 'Level balancing', 'Basic stereo imaging', 'Streaming-ready export']
+    },
+    {
+      name: 'Premium Mixing', price: '$299', tier: 'Most Popular',
+      turnaround: '3–5 days', revisions: 'Unlimited revisions', delivery: 'WAV + MP3 + Stems', featured: true,
+      features: ['Unlimited stems', 'Full vocal processing', 'Auto-Tune / pitch correction', 'Creative effects design', 'Mastering included', 'Priority queue access']
+    },
+    {
+      name: 'Mastering Only', price: '$89', tier: 'Essential',
+      turnaround: '2–3 days', revisions: '2 revisions', delivery: 'WAV + MP3', featured: false,
+      features: ['Stereo mastering', 'Loudness optimization (LUFS)', 'Streaming platform ready', 'Dynamic EQ & compression', 'Apple Digital Masters standard']
+    },
+    {
+      name: 'Mix + Master Bundle', price: '$349', tier: 'Complete',
+      turnaround: '4–6 days', revisions: 'Unlimited revisions', delivery: 'Full delivery package', featured: false,
+      features: ['Everything in Premium Mixing', 'Professional mastering included', 'Stem mastering option', 'Commercial release ready', 'Rush delivery available']
+    }
+  ];
+
+  const FAQS = [
+    { q: 'What file formats do you accept?', a: 'We accept WAV, AIFF, MP3, FLAC, and ZIP stem packs. For mixing, individual stems are preferred at 24-bit/44.1kHz or higher. For mastering, provide a high-quality stereo WAV at the session sample rate with 6dB of headroom.' },
+    { q: 'How many revisions are included?', a: 'Basic and Mastering packages include 2 revisions. Premium Mixing and the Bundle package include unlimited revisions until you are completely satisfied with the result.' },
+    { q: 'Do you work with independent artists?', a: 'Absolutely — the vast majority of our clients are independent artists and producers. DGUNZ delivers major-label quality engineering regardless of your budget, label status, or release size.' },
+    { q: 'What platforms will my master be ready for?', a: 'Your master will be optimized for Spotify, Apple Music, YouTube, TIDAL, Amazon Music, radio broadcast, club systems, and immersive audio platforms. We target platform-specific LUFS levels for every delivery.' },
+    { q: 'How does payment work?', a: 'Payment is required before work begins. We will confirm your project details and send a payment link after reviewing your submission. We accept all major cards and PayPal.' },
+    { q: 'Can I request changes after delivery?', a: 'Yes — revisions are included in every package. For unlimited revision packages, we refine until you\'re completely happy. For limited revision packages, additional revisions are available for +$25 each.' }
+  ];
+
+  const TRACKS = [
+    { title: 'Soul Ascension', genre: 'R&B / Soul', note: 'Vocal clarity, depth & spatial transformation' },
+    { title: 'Street Symphony', genre: 'Hip-Hop / Trap', note: 'Punch, presence & low-end precision' },
+    { title: 'Lagos Nights', genre: 'Afrobeats', note: 'Groove, warmth & commercial polish' },
+    { title: 'Gospel Fire', genre: 'Gospel / Choir', note: 'Separation, dynamics & emotional power' }
+  ];
+
+  /* ===== PAGE ROUTING ===== */
+  function showPage(id) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    const page = document.getElementById('page-' + id);
+    if (page) {
+      page.classList.add('active');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      initReveal();
+    }
+  }
+
+  /* ===== MOBILE MENU ===== */
+  function toggleMobileMenu() {
+    const btn = document.getElementById('hamburger');
+    const menu = document.getElementById('mobileMenu');
+    btn.classList.toggle('open');
+    menu.classList.toggle('open');
+  }
+
+  /* ===== NAVBAR SCROLL ===== */
+  window.addEventListener('scroll', () => {
+    document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 40);
+    updatePlayheads();
+  });
+
+  /* ===== CUSTOM CURSOR ===== */
+  const cur = document.getElementById('cursor');
+  const ring = document.getElementById('cursorRing');
+  let mx = 0, my = 0, rx = 0, ry = 0;
+  document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; cur.style.left = mx + 'px'; cur.style.top = my + 'px'; });
+  function animRing() {
+    rx += (mx - rx) * 0.15;
+    ry += (my - ry) * 0.15;
+    ring.style.left = rx + 'px'; ring.style.top = ry + 'px';
+    requestAnimationFrame(animRing);
+  }
+  animRing();
+
+  /* ===== REVEAL ON SCROLL ===== */
+  function initReveal() {
+    setTimeout(() => {
+      const items = document.querySelectorAll('.page.active .reveal');
+      const obs = new IntersectionObserver((entries) => {
+        entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
+      }, { threshold: 0.08 });
+      items.forEach(el => obs.observe(el));
+    }, 100);
+  }
+  initReveal();
+
+  /* ===== PRICING CARDS BUILDER ===== */
+  function buildPricingCards(containerId) {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+    container.innerHTML = PACKAGES.map(p => `
+      <div class="price-card ${p.featured ? 'featured' : ''}">
+        ${p.featured ? '<div class="featured-tag">Most Popular</div>' : ''}
+        <div class="price-tier">${p.tier}</div>
+        <div class="price-amount">${p.price}</div>
+        <div class="price-sub">${p.turnaround} &nbsp;·&nbsp; ${p.revisions}</div>
+        <div class="price-divider"></div>
+        <ul class="price-features">
+          ${p.features.map(f => `<li>${f}</li>`).join('')}
+        </ul>
+        <div class="price-meta">
+          <div class="price-meta-item"><div class="price-meta-label">Delivery</div><div class="price-meta-value">${p.delivery}</div></div>
+        </div>
+        <button class="btn-gold" style="width:100%" onclick="showPage('upload')">Get Started</button>
+      </div>
+    `).join('');
+  }
+  buildPricingCards('homePricingGrid');
+  buildPricingCards('fullPricingGrid');
+
+  /* ===== FAQ BUILDER ===== */
+  function buildFAQ(containerId) {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+    container.innerHTML = FAQS.map((f, i) => `
+      <div class="faq-item" id="faq-${containerId}-${i}">
+        <button class="faq-question" onclick="toggleFAQ('faq-${containerId}-${i}')">
+          ${f.q} <i class="faq-icon">+</i>
+        </button>
+        <div class="faq-answer">${f.a}</div>
+      </div>
+    `).join('');
+  }
+  buildFAQ('faqList');
+  buildFAQ('faqListContact');
+
+  function toggleFAQ(id) {
+    const item = document.getElementById(id);
+    const isOpen = item.classList.contains('open');
+    document.querySelectorAll('.faq-item.open').forEach(el => el.classList.remove('open'));
+    if (!isOpen) item.classList.add('open');
+  }
+
+  /* ===== WAVEFORM GENERATOR ===== */
+  const WAVE_DATA = {
+    before: [12,18,22,16,28,20,15,25,32,20,18,28,22,18,25,20,15,28,18,22,25,20,18,15,22,28,20,18,25,15,20,28,22,18,25,20,28,15,18,22,25,20,18,28,22,15,20,25,18,22],
+    after:  [28,42,55,48,68,52,45,62,75,58,52,70,62,50,68,58,48,72,52,62,68,55,50,45,60,72,58,50,65,42,55,72,60,50,68,55,72,42,52,60,68,55,50,72,60,42,55,68,50,60]
+  };
+
+  function buildWaveform(containerId, state) {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+    const playhead = container.querySelector('.playhead');
+    container.innerHTML = '';
+    if (playhead) container.appendChild(playhead);
+    const data = WAVE_DATA[state];
+    data.forEach((h, i) => {
+      const bar = document.createElement('div');
+      bar.className = 'wave-bar';
+      bar.style.height = h + '%';
+      bar.style.background = state === 'after'
+        ? `rgba(200,169,110,${0.35 + (h / 75) * 0.55})`
+        : `rgba(100,94,88,${0.3 + (h / 32) * 0.45})`;
+      container.appendChild(bar);
+    });
+    if (playhead) container.appendChild(playhead);
+  }
+
+  /* ===== DEMO PLAYER (Home) ===== */
+  let abState = 'before', currentTrack = 0, isPlaying = false, playInterval = null, progress = 0;
+
+  function setABState(state) {
+    abState = state;
+    document.getElementById('abBefore').classList.toggle('active', state === 'before');
+    document.getElementById('abAfter').classList.toggle('active', state === 'after');
+    document.getElementById('stateLabel').textContent = state === 'before' ? 'RAW RECORDING' : 'DGUNZ ENGINEERED';
+    buildWaveform('waveformContainer', state);
+    stopPlay();
+  }
+
+  function selectTrack(idx, btn) {
+    document.querySelectorAll('#page-home .demo-track-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    currentTrack = idx;
+    const t = TRACKS[idx];
+    document.getElementById('demoTitle').textContent = t.title;
+    document.getElementById('demoGenre').textContent = t.genre;
+    document.getElementById('demoNote').textContent = t.note;
+    setABState('before');
+    progress = 0;
+    updateProgress();
+  }
+
+  function togglePlay() {
+    isPlaying ? stopPlay() : startPlay();
+  }
+
+  function startPlay() {
+    isPlaying = true;
+    document.getElementById('playBtn').textContent = '⏸';
+    playInterval = setInterval(() => {
+      progress = Math.min(progress + 0.4, 100);
+      updateProgress();
+      if (progress >= 100) stopPlay();
+    }, 100);
+  }
+
+  function stopPlay() {
+    isPlaying = false;
+    document.getElementById('playBtn').textContent = '▶';
+    clearInterval(playInterval);
+  }
+
+  function updateProgress() {
+    const fill = document.getElementById('progressFill');
+    if (fill) fill.style.width = progress + '%';
+    const ph = document.getElementById('playhead');
+    if (ph) ph.style.left = progress + '%';
+    const secs = Math.round(progress * 1.5);
+    const m = Math.floor(secs / 60), s = secs % 60;
+    const td = document.getElementById('timeDisplay');
+    if (td) td.textContent = `${m}:${s.toString().padStart(2,'0')} / 2:30`;
+  }
+
+  function seekAudio(event) {
+    const rect = event.currentTarget.getBoundingClientRect();
+    progress = ((event.clientX - rect.left) / rect.width) * 100;
+    updateProgress();
+  }
+
+  function updatePlayheads() {
+    // called on scroll, nothing needed
+  }
+
+  /* ===== DEMO PLAYER (Demos Page) ===== */
+  let abState2 = 'before', currentTrack2 = 0, isPlaying2 = false, playInterval2 = null, progress2 = 0;
+
+  function setABState2(state) {
+    abState2 = state;
+    document.getElementById('abBefore2').classList.toggle('active', state === 'before');
+    document.getElementById('abAfter2').classList.toggle('active', state === 'after');
+    document.getElementById('stateLabel2').textContent = state === 'before' ? 'RAW RECORDING' : 'DGUNZ ENGINEERED';
+    buildWaveform('waveformContainer2', state);
+    stopPlay2();
+  }
+
+  function selectTrack2(idx, btn) {
+    document.querySelectorAll('#page-demos .demo-track-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    currentTrack2 = idx;
+    const t = TRACKS[idx];
+    document.getElementById('demoTitle2').textContent = t.title;
+    document.getElementById('demoGenre2').textContent = t.genre;
+    document.getElementById('demoNote2').textContent = t.note;
+    setABState2('before');
+    progress2 = 0;
+    updateProgress2();
+  }
+
+  function togglePlay2() {
+    isPlaying2 ? stopPlay2() : startPlay2();
+  }
+
+  function startPlay2() {
+    isPlaying2 = true;
+    document.getElementById('playBtn2').textContent = '⏸';
+    playInterval2 = setInterval(() => {
+      progress2 = Math.min(progress2 + 0.4, 100);
+      updateProgress2();
+      if (progress2 >= 100) stopPlay2();
+    }, 100);
+  }
+
+  function stopPlay2() {
+    isPlaying2 = false;
+    document.getElementById('playBtn2').textContent = '▶';
+    clearInterval(playInterval2);
+  }
+
+  function updateProgress2() {
+    const fill = document.getElementById('progressFill2');
+    if (fill) fill.style.width = progress2 + '%';
+    const ph = document.getElementById('playhead2');
+    if (ph) ph.style.left = progress2 + '%';
+    const secs = Math.round(progress2 * 1.5);
+    const m = Math.floor(secs / 60), s = secs % 60;
+    const td = document.getElementById('timeDisplay2');
+    if (td) td.textContent = `${m}:${s.toString().padStart(2,'0')} / 2:30`;
+  }
+
+  function seekAudio2(event) {
+    const rect = event.currentTarget.getBoundingClientRect();
+    progress2 = ((event.clientX - rect.left) / rect.width) * 100;
+    updateProgress2();
+  }
+
+  /* Init waveforms */
+  buildWaveform('waveformContainer', 'before');
+  buildWaveform('waveformContainer2', 'before');
+
+  /* ===== FILE UPLOAD ===== */
+  let uploadedFiles = [];
+
+  function handleDragOver(e) {
+    e.preventDefault();
+    document.getElementById('dropZone').classList.add('dragover');
+  }
+  function handleDragLeave() {
+    document.getElementById('dropZone').classList.remove('dragover');
+  }
+  function handleDrop(e) {
+    e.preventDefault();
+    document.getElementById('dropZone').classList.remove('dragover');
+    addFiles(Array.from(e.dataTransfer.files));
+  }
+  function handleFileSelect(e) {
+    addFiles(Array.from(e.target.files));
+    e.target.value = '';
+  }
+  function addFiles(files) {
+    files.forEach(f => {
+      if (!uploadedFiles.find(x => x.name === f.name && x.size === f.size)) {
+        uploadedFiles.push(f);
+      }
+    });
+    renderFileList();
+  }
+  function removeFile(idx) {
+    uploadedFiles.splice(idx, 1);
+    renderFileList();
+  }
+  function renderFileList() {
+    const list = document.getElementById('fileList');
+    list.innerHTML = uploadedFiles.map((f, i) => `
+      <div class="file-item">
+        <span style="color:var(--gold);font-size:1rem">♪</span>
+        <span class="file-name">${f.name}</span>
+        <span class="file-size">${(f.size / 1024 / 1024).toFixed(2)} MB</span>
+        <button class="file-remove" onclick="removeFile(${i})" title="Remove">✕</button>
+      </div>
+    `).join('');
+  }
+
+  /* ===== FORM SUBMIT ===== */
+  function submitOrder(e) {
+    e.preventDefault();
+    const terms = document.getElementById('termsCheck').checked;
+    if (!terms) { showToast('Please agree to the terms before submitting.'); return; }
+    // TODO: Connect to Supabase + EmailJS here
+    document.getElementById('uploadForm').style.display = 'none';
+    document.getElementById('uploadSuccess').style.display = 'block';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function resetUploadForm() {
+    document.getElementById('uploadForm').style.display = 'block';
+    document.getElementById('uploadSuccess').style.display = 'none';
+    document.getElementById('orderForm').reset();
+    uploadedFiles = [];
+    renderFileList();
+  }
+
+  function submitContact(e) {
+    e.preventDefault();
+    // TODO: Connect to EmailJS here
+    e.target.reset();
+    showToast('Message sent! DGUNZ will reply within 24 hours.');
+  }
+
+  /* ===== TOAST ===== */
+  let toastTimer = null;
+  function showToast(msg) {
+    document.getElementById('toastMsg').textContent = msg;
+    const toast = document.getElementById('toast');
+    toast.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => toast.classList.remove('show'), 3500);
+  }
+</script>
+</body>
+</html>
