@@ -2870,6 +2870,15 @@ initReveal();
 
 /* ─── TOAST ─── */
 let toastT;
+function escapeHtml(str) {
+  return String(str == null ? '' : str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
 function toast(msg) {
   document.getElementById('toastMsg').textContent = msg;
   document.getElementById('toast').classList.add('show');
@@ -3747,20 +3756,30 @@ async function saveDemo() {
 async function saveTestimonial() {
   const name=document.getElementById('tName').value.trim(), quote=document.getElementById('tQuote').value.trim();
   if (!name||!quote) { toast('Please fill in name and quote.'); return; }
-  if (!sb) { toast('Supabase not connected.'); return; }
 
-  const payload = {
+  const payload = normalizeTestimonial({
     name: name,
     role: (document.getElementById('tRole').value || '').trim(),
     quote: quote,
     stars: parseInt(document.getElementById('tStars').value || '5', 10) || 5,
     published: !!document.getElementById('tPub').checked
-  };
+  });
 
-  const res = await sb.from('testimonials').insert(payload);
-  if (res && res.error) {
-    toast('Error: ' + res.error.message);
-    return;
+  var local = getLocalTestimonials();
+  local.unshift(payload);
+  setLocalTestimonials(local);
+
+  if (sb) {
+    const res = await sb.from('testimonials').insert({
+      name: payload.name,
+      role: payload.role,
+      quote: payload.quote,
+      stars: payload.stars,
+      published: payload.published
+    });
+    if (res && res.error) {
+      toast('Saved locally. Supabase sync failed: ' + res.error.message);
+    }
   }
 
   document.getElementById('tName').value = '';
@@ -5769,12 +5788,19 @@ async function seedDefaultTestimonialsIfNeeded() {
 async function loadHomeTestimonials() {
   var track = document.getElementById('homeTestimonialsTrack');
   if (!track) return;
-  renderHomeTestimonials(defaultHomepageTestimonials);
+
+  var local = ensureLocalTestimonialsSeeded().filter(function(t){ return t.published; });
+  renderHomeTestimonials(local.length ? local : defaultHomepageTestimonials);
+
   if (!sb) return;
-  await seedDefaultTestimonialsIfNeeded();
+
   var res = await sb.from('testimonials').select('*').eq('published', true).order('created_at', { ascending: false });
-  if (res && res.data && res.data.length) {
-    renderHomeTestimonials(res.data);
+  if (res && !res.error && Array.isArray(res.data) && res.data.length) {
+    var remote = res.data.map(normalizeTestimonial);
+    var allLocal = getLocalTestimonials();
+    var unpublished = allLocal.filter(function(t){ return !t.published; });
+    setLocalTestimonials(remote.concat(unpublished));
+    renderHomeTestimonials(remote);
   }
 }
 
@@ -5782,35 +5808,99 @@ window.addEventListener('resize', updateHomeTestimonialsSlider);
 
 var _adminTestimonials = [];
 var _editingTestimonialId = null;
+var TESTI_LOCAL_KEY = 'dgunz_testimonials_cache_v1';
 
-async function loadAdminTestimonials() {
-  const tbody = document.getElementById('testiTable');
-  if (!tbody) return;
-  if (!sb) return;
-
-  await seedDefaultTestimonialsIfNeeded();
-
-  const res = await sb.from('testimonials').select('*').order('created_at', { ascending: false });
-  if (res && res.error) {
-    tbody.innerHTML = '<tr><td colspan="4"><div class="a-empty"><span class="ei">★</span>Could not load testimonials.</div></td></tr>';
-    return;
+function getLocalTestimonials() {
+  try {
+    var raw = localStorage.getItem(TESTI_LOCAL_KEY);
+    var arr = raw ? JSON.parse(raw) : [];
+    return Array.isArray(arr) ? arr : [];
+  } catch (e) {
+    return [];
   }
+}
 
-  const data = Array.isArray(res && res.data) ? res.data : [];
-  _adminTestimonials = data;
+function setLocalTestimonials(items) {
+  try {
+    localStorage.setItem(TESTI_LOCAL_KEY, JSON.stringify(items || []));
+  } catch (e) {}
+}
 
-  if (!data.length) {
+function normalizeTestimonial(item) {
+  return {
+    id: item && item.id ? item.id : ('local_' + Date.now() + '_' + Math.random().toString(36).slice(2, 8)),
+    name: item && item.name ? item.name : '',
+    role: item && item.role ? item.role : '',
+    quote: item && item.quote ? item.quote : '',
+    stars: Math.max(1, Math.min(5, parseInt((item && item.stars) || 5, 10) || 5)),
+    published: item && typeof item.published === 'boolean' ? item.published : true,
+    created_at: item && item.created_at ? item.created_at : new Date().toISOString()
+  };
+}
+
+function ensureLocalTestimonialsSeeded() {
+  var local = getLocalTestimonials();
+  if (local.length) return local;
+  local = defaultHomepageTestimonials.map(function(t, i) {
+    return normalizeTestimonial({
+      id: 'seed_' + (i + 1),
+      name: t.name,
+      role: t.role,
+      quote: t.quote,
+      stars: t.stars,
+      published: t.published,
+      created_at: new Date(Date.now() - i * 1000).toISOString()
+    });
+  });
+  setLocalTestimonials(local);
+  return local;
+}
+
+function renderAdminTestimonialsTable(data) {
+  var tbody = document.getElementById('testiTable');
+  if (!tbody) return;
+  _adminTestimonials = Array.isArray(data) ? data : [];
+
+  if (!_adminTestimonials.length) {
     tbody.innerHTML = '<tr><td colspan="4"><div class="a-empty"><span class="ei">★</span>No testimonials yet.</div></td></tr>';
     return;
   }
 
-  tbody.innerHTML = data.map(function(t) {
+  tbody.innerHTML = _adminTestimonials.map(function(t) {
     var safeId = String(t.id).replace(/"/g, '&quot;');
     var stars = Math.max(1, Math.min(5, parseInt(t.stars || 5, 10) || 5));
     return '<tr style="cursor:pointer" onclick="openTestimonialEditModal(&quot;' + safeId + '&quot;)"><td>' + escapeHtml(t.name || '—') + '</td><td>' + escapeHtml(t.role || '—') + '</td>' +
-    '<td>' + '&#9733;'.repeat(stars) + '</td>' +
-    '<td><span class="status-pill ' + (t.published ? 's-done' : 's-revision') + '">' + (t.published ? 'Published' : 'Draft') + '</span></td></tr>';
+      '<td>' + '&#9733;'.repeat(stars) + '</td>' +
+      '<td><span class="status-pill ' + (t.published ? 's-done' : 's-revision') + '">' + (t.published ? 'Published' : 'Draft') + '</span></td></tr>';
   }).join('');
+}
+
+async function loadAdminTestimonials() {
+  const tbody = document.getElementById('testiTable');
+  if (!tbody) return;
+
+  var local = ensureLocalTestimonialsSeeded();
+
+  if (!sb) {
+    renderAdminTestimonialsTable(local);
+    return;
+  }
+
+  const res = await sb.from('testimonials').select('*').order('created_at', { ascending: false });
+
+  if (res && !res.error && Array.isArray(res.data) && res.data.length) {
+    var remote = res.data.map(normalizeTestimonial);
+    setLocalTestimonials(remote);
+    renderAdminTestimonialsTable(remote);
+    return;
+  }
+
+  if (res && !res.error && Array.isArray(res.data) && !res.data.length) {
+    renderAdminTestimonialsTable(local);
+    return;
+  }
+
+  renderAdminTestimonialsTable(local);
 }
 
 function openTestimonialEditModal(id) {
@@ -5834,7 +5924,6 @@ function closeTestimonialEditModal() {
 
 async function updateTestimonial() {
   if (!_editingTestimonialId) return;
-  if (!sb) { toast('Supabase not connected.'); return; }
 
   var payload = {
     name: ((document.getElementById('editTestiName') || {}).value || '').trim(),
@@ -5849,10 +5938,32 @@ async function updateTestimonial() {
     return;
   }
 
-  const res = await sb.from('testimonials').update(payload).eq('id', _editingTestimonialId);
-  if (res && res.error) {
-    toast('Error: ' + res.error.message);
-    return;
+  var local = getLocalTestimonials();
+  local = local.map(function(t){
+    if (String(t.id) !== String(_editingTestimonialId)) return t;
+    return normalizeTestimonial({
+      id: t.id,
+      created_at: t.created_at,
+      name: payload.name,
+      role: payload.role,
+      quote: payload.quote,
+      stars: payload.stars,
+      published: payload.published
+    });
+  });
+  setLocalTestimonials(local);
+
+  if (sb && !String(_editingTestimonialId).startsWith('local_') && !String(_editingTestimonialId).startsWith('seed_')) {
+    const res = await sb.from('testimonials').update({
+      name: payload.name,
+      role: payload.role,
+      quote: payload.quote,
+      stars: payload.stars,
+      published: payload.published
+    }).eq('id', _editingTestimonialId);
+    if (res && res.error) {
+      toast('Updated locally. Supabase sync failed: ' + res.error.message);
+    }
   }
 
   closeTestimonialEditModal();
